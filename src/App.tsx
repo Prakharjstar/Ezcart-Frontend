@@ -1,24 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Button } from '@mui/material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="p-10">
+      <h1 className='font-bold text-4xl  flex justify-center mt-5 '> Welcome to Ezcart Project</h1>
+<div className='flex justify-center'>
+    <Button variant='contained'>Start</Button>
+
+    <AddShoppingCartIcon/>
+
+</div>
+    
+   
     </div>
   );
 }
