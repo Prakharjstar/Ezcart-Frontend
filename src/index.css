@@ -11,7 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+.logo{
+   font-family: "Orbitron", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  color: black
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
