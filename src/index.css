@@ -15,7 +15,12 @@ code {
    font-family: "Orbitron", sans-serif;
   font-weight: 600;
   font-style: normal;
-  color: black
+  caret-color: transparent
+  
+}
+
+.mainCategory {
+  caret-color: transparent;
 }
 @tailwind base;
 @tailwind components;
