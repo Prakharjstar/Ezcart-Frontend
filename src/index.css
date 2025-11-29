@@ -18,6 +18,10 @@ code {
   caret-color: transparent
   
 }
+* {
+  caret-color: transparent ;
+}
+
 
 .mainCategory {
   caret-color: transparent;
