@@ -3,15 +3,16 @@ import React from "react";
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { AddShoppingCart, Favorite, FavoriteBorder, Storefront } from "@mui/icons-material";
+import CategorySheet from "./CategorySheet";
 
 const Navbar = () => {
     const theme=useTheme();
     const isLarge=useMediaQuery(theme.breakpoints.up("lg"));
     return(
         <>
-            <Box>
+            <Box className='sticky top-0 left-0 right-0' sx={{zIndex:2}}>
 
-                <div className='flex  items-center  justify-between px-4 lg:px-20 h-[70px] border-b '>
+                <div className='flex  items-center  justify-between px-5 lg:px-20 h-[70px] border-b '>
 
                  <div className='flex items-center gap-9'>
 
@@ -64,6 +65,9 @@ const Navbar = () => {
 
                 </div>
                 
+             </div>
+             <div className='categorySheet absolute top-[4.41rem] left-20 right-20 border '>
+                <CategorySheet/>
              </div>
 
             </Box>
