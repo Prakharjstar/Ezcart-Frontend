@@ -32,7 +32,7 @@ export const furnitureLevelTwo = [
   {
     "name": "Kitchen & Table",
     "categoryId": "furniture_kitchen_table",
-    "parentCategoryId": "home_furniture",
+    "parentCategoryId": "furniture",
     "level": 2
   }
 ];

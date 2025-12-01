@@ -10,7 +10,7 @@ const Navbar = () => {
     const isLarge=useMediaQuery(theme.breakpoints.up("lg"));
     return(
         <>
-            <Box className='sticky top-0 left-0 right-0' sx={{zIndex:2}}>
+            <Box className='bg-white sticky top-0 left-0 right-0' sx={{zIndex:2}}>
 
                 <div className='flex  items-center  justify-between px-5 lg:px-20 h-[70px] border-b '>
 
@@ -67,7 +67,7 @@ const Navbar = () => {
                 
              </div>
              <div className='categorySheet absolute top-[4.41rem] left-20 right-20 border '>
-                <CategorySheet/>
+                <CategorySheet selectedCategory="home_furniture"/>
              </div>
 
             </Box>

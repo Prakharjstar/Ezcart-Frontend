@@ -13,7 +13,7 @@ export const electronicsLevelTwo = [
   },
   {
     "name": "Smart Wearable Tech",
-    "categoryId": "electronics_smart_wearable_tech",
+    "categoryId": "electronics_smart_wearables",
     "parentCategoryId": "electronics",
     "level": 2
   },
@@ -28,7 +28,9 @@ export const electronicsLevelTwo = [
     "categoryId": "electronics_tablets",
     "parentCategoryId": "electronics",
     "level": 2
-  }
+  },
+  
+  
 ];
 
 export default electronicsLevelTwo;

@@ -10,7 +10,7 @@ import furnitureLevelThree from "../../../data/category/level three/furnitureLev
 import { Box } from "@mui/material";
 import menLevelTwo from "../../../data/category/level two/menLevelTwo";
 
-const CategoryTwo={
+const CategoryTwo:{[key:string]:any[]}={
     men:menLevelTwo ,
     women:womenleveltwo,
     electronics: electronicsLevelTwo,
@@ -18,24 +18,40 @@ const CategoryTwo={
     
 }
 
-const CategoryThree={
+const CategoryThree:{[key:string]:any[]}={
     men: menLevelThree,
     women: womenLevelThree,
     electronics: electronicsMobilesLevelThree,
     home_furniture:furnitureLevelThree
 }
 
-const CategorySheet = () =>{
+const CategorySheet = ({selectedCategory,setShowSheet}:any) =>{
+
+  const childCategory=(category:any,parentCategoryId:any)=>{
+    return category.filter((child:any)=> child.parentCategoryId==parentCategoryId )
+  }
     
     return(
        
 
-      <Box  className= 'shadow-lg lg:h-[500px] overflow-y-auto'>
+      <Box sx={{zIndex: 2}}  className= 'bg-white shadow-lg lg:h-[500px] overflow-y-auto'>
         <div className='flex text-sm flex-wrap'>
 
      {
-        CategoryTwo["men"]?.map((item)=><div>
+        CategoryTwo[selectedCategory]?.map((item,index)=><div className={`p-8 lg:w-[20%] ${index%2==0?"bg-slate-50":"bg-white"}`}>
             <p className='text-primary-color  mb-5 font-semibold'>{item.name}</p>
+            <ul className='space-y-3'>
+
+              {childCategory(CategoryThree[selectedCategory],item.categoryId).map((item:any)=><div>
+
+             <li className='hover:text-primary-color cursor-pointer'>
+                {item.name}
+
+              </li>
+              </div>)}
+
+             
+            </ul>
         </div>)
      }
 
