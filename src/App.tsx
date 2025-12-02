@@ -18,14 +18,10 @@ function App() {
       <ThemeProvider theme={customTheme}>
         <div>
              <Navbar/>
-             <Home/>
-            
-             
+             <Home/>    
          
         </div>
       
-
-
       </ThemeProvider>
      
   
