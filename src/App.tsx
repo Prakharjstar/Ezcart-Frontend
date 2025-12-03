@@ -7,6 +7,7 @@ import Navbar from './customer/components/Navbar/Navbar';
 import customTheme from './Theme/customeTheme';
 import Home from './customer/pages/Home/Home';
 import Deal from './customer/pages/Home/Deal/Deal';
+import Product from './customer/pages/Product/Product';
 
 
 
@@ -18,7 +19,9 @@ function App() {
       <ThemeProvider theme={customTheme}>
         <div>
              <Navbar/>
-             <Home/>    
+             {/*<Home/> */} 
+
+             <Product/>   
          
         </div>
       
