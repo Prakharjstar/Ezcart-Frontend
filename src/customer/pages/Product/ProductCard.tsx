@@ -35,7 +35,7 @@ const ProductCard = ()=>{
             <div className='card' onMouseEnter={()=> setIsHovered(true)} onMouseLeave={()=> setIsHovered(false)}  >
                 {images.map((item,index)=> <img className='card-media object-top' src={item} alt=""  style={{transform:`translateX(${(index-currentImage)*100}%)`}}  />)}
             
-            { <div className="indicator flex flex-col items-center space-y-2">
+            { isHovered && <div className="indicator flex flex-col items-center space-y-2">
                 <div className="flex gap-3">
 
             <Button variant="contained" color="secondary">

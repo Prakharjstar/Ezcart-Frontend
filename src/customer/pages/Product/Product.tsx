@@ -61,8 +61,8 @@ const Product= ()=>{
                         </div>
 
                         <Divider/>
-                 <section className="product_section ">
-                    <ProductCard/>
+                 <section className="product_section grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5 justify-center">
+                    {[1,1,1,1,1,1].map((item)=><ProductCard/>)}
                     </section>
 
                 </div>
