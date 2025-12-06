@@ -8,6 +8,7 @@ import customTheme from './Theme/customeTheme';
 import Home from './customer/pages/Home/Home';
 import Deal from './customer/pages/Home/Deal/Deal';
 import Product from './customer/pages/Product/Product';
+import ProductDetails from './customer/pages/PageDetails/PoductDetails';
 
 
 
@@ -21,7 +22,9 @@ function App() {
              <Navbar/>
              {/*<Home/> */} 
 
-             <Product/>   
+             {/* {<Product/> }   */}
+
+             <ProductDetails/>
          
         </div>
       
