@@ -2,6 +2,7 @@ import React from "react";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ReviewCard from "./ReviewCard";
 import { Divider } from "@mui/material";
+import ReviewBarCard from "./ReviewBarCard";
 
 const Review= ()=>{
     return(
@@ -30,7 +31,12 @@ const Review= ()=>{
                     </div>
             </div>
             </section>
+            
+            <section></section>
+
             <section className="space-y-5 w-full">
+               
+                   <ReviewBarCard/>
                 {[1,1,1,1,1,1].map((item)=> <div className="spy3 space-y-3"> <ReviewCard/> <Divider/> </div>)}
               
             </section>

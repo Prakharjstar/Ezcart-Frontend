@@ -11,6 +11,7 @@ import Product from './customer/pages/Product/Product';
 import ProductDetails from './customer/pages/PageDetails/PoductDetails';
 import ReviewCard from './customer/pages/Review/ReviewCard';
 import Review from './customer/pages/Review/Review';
+import Cart from './customer/pages/Cart/Cart';
 
 
 
@@ -28,7 +29,8 @@ function App() {
 
               {/* <ProductDetails/> */}
 
-              <Review/>
+              {/* <Review/> */}
+              <Cart/>
          
         </div>
       
