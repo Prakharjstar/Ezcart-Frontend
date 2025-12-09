@@ -12,6 +12,7 @@ import ProductDetails from './customer/pages/PageDetails/PoductDetails';
 import ReviewCard from './customer/pages/Review/ReviewCard';
 import Review from './customer/pages/Review/Review';
 import Cart from './customer/pages/Cart/Cart';
+import Checkout from './customer/pages/Checkout/Checkout';
 
 
 
@@ -22,15 +23,17 @@ function App() {
     
       <ThemeProvider theme={customTheme}>
         <div>
-             <Navbar/>
-             {/*<Home/> */} 
+              <Navbar/>
+             {/* <Home/>  */}
 
-             {/* {<Product/> }   */}
+             {/* <Product/>  */}
 
               {/* <ProductDetails/> */}
 
               {/* <Review/> */}
-              <Cart/>
+              {/* <Cart/> */}
+
+              <Checkout/>
          
         </div>
       

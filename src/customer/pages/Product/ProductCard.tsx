@@ -2,6 +2,7 @@ import { Button, DialogContent } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./ProductCard.css"
 import { Favorite, ModeComment } from "@mui/icons-material";
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { teal } from "@mui/material/colors";
 
 const images=[
@@ -65,9 +66,9 @@ const ProductCard = ()=>{
 
                 <div className="price flex items-center gap-3">
 
-                <span className="font-sans text-gray-800"> rs 1200
+                <span className="font-sans text-gray-800"> <CurrencyRupeeIcon sx={{fontSize :12}}/> 1200
                 </span>
-                <span className="thin-line-through text-gray-400"> rs 2000</span>
+                <span className="thin-line-through text-gray-400"> <CurrencyRupeeIcon sx={{fontSize :12}}/> 2000</span>
                 <span className="text-green-500 font-semibold">60%</span> 
 
 

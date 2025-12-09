@@ -17,7 +17,7 @@ const CartItem = () =>{
             </div>
 
             <div className="space-y-2 ">
-                <h1 className="font-semibold text-lg"> Harsh Clothing</h1>
+                <h1 className="font-semibold text-lg"> Kittu Clothing</h1>
                 <p className="text-gray-600 font-medium text-sm">Turquooise Blue Stoneword Satin Designer Saree</p>
                 <p className="text-gray-400 text-xs"><strong>Sold by : </strong> Natural Lifestyle Products PrivateLimited</p>
                 <p> 7 days replacement available</p>

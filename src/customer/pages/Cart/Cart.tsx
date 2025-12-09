@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import CartItem from "./CartItem";
-import { LocalOffer } from "@mui/icons-material";
+import { Close, LocalOffer } from "@mui/icons-material";
 import { teal } from "@mui/material/colors";
-import { Button, TextField, useScrollTrigger } from "@mui/material";
+import { Button, IconButton, TextField, useScrollTrigger } from "@mui/material";
+import PricingCard from "./PricingCard";
 
 const Cart = ()=>{
 
@@ -33,17 +34,38 @@ const Cart = ()=>{
                             <span>Apply Coupons</span>
                             </div>
 
-                        <div className="flex justify-between items-center">
-                            <TextField onChange={handleChange} id ="outlined-basic" placeholder="coupon code" size="small" variant="outlined"/>
+                {  true?          <div className="flex justify-between items-center">
+                                <TextField onChange={handleChange} id ="outlined-basic" placeholder="coupon code" size="small" variant="outlined"/>
 
-                            <Button  size="small">
-                                Apply
-                            </Button>
+                                <Button  size="small">
+                                    Apply
+                                </Button>
 
+                            </div> :
+
+                            <div className="flex">
+                                <div className="p-1 pl-5 pr-3 border rounded-md  flex gap-2 items-center">
+                                    <span className=""> Applied</span>
+                                    <IconButton size="small">
+                                        <Close className="text-red-600"/>
+                                    </IconButton>
+
+                                </div>
+
+                            </div> }
+
+
+
+                    </div>
+
+                    <div className="border rounded-md">
+                        <PricingCard/>
+                        <div className="p-5">
+                            <Button
+                             fullWidth 
+                             variant="contained" 
+                             sx={{py:"11px"}}>Buy now</Button>
                         </div>
-
-
-
                     </div>
 
                 </div>
