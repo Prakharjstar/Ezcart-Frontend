@@ -35,6 +35,12 @@ const Checkout = () => {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [paymentGateway , setPaymentGateway]= React.useState("RAZORPAY");
+
+
+    const handlePaymentChange= (event:any) =>{
+        setPaymentGateway(event.target.value)
+    }
 
     return (
         <>
@@ -83,6 +89,8 @@ const Checkout = () => {
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
                                     className='flex justify-between pr-0'
+                                    onChange={handlePaymentChange}
+                                    value={paymentGateway}
                                 >
                                 {
                                     paymentGatewayList.map((item)=>  <FormControlLabel className='border w-[45%] pr-2 rounded-md justify-center' value={item.value} control={<Radio />} label={<img className={`${item.value=="stripe"?"w-14":""} object-cover`} src={item.image} alt={item.label}/>} />)
