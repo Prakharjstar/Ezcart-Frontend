@@ -16,7 +16,7 @@ function OrderItem() {
             </div>
 
             <div>
-                <h1 className='font-bold text-primary-color'> PENDING</h1>
+                <h1 className='font-bold text-primary-color'>PENDING</h1>
                 <p>Arriving By Mon, 15 Oct</p>
             </div>
         </div>
