@@ -37,9 +37,8 @@ function App() {
 
               {/* <Checkout/> */}
 
-              {/* <Account/> */}
-
-               <OrderDetails/>
+             <Account/>
+             <OrderDetails/>
             
          
         </div>

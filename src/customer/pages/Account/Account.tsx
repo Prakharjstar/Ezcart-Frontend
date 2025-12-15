@@ -37,7 +37,7 @@ function Account() {
                          <p > {item.name} </p> </div>
                 ))}</section>
 
-                <section className='righ lg:col-span-2 lg:pl-5  py-5 ' >
+                <section className='right lg:col-span-2 lg:pl-5  py-5 ' >
                     {/* <Orders/>  */}
 
                     <OrderDetails/>
