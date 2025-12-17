@@ -26,19 +26,19 @@ function App() {
       <ThemeProvider theme={customTheme}>
         <div>
               <Navbar/>
-             {/* <Home/>  */}
+             {/* { <Home/>  } */}
 
-             {/* <Product/>  */}
+             {/* { <Product/>  } */}
 
-              {/* <ProductDetails/> */}
+              { <ProductDetails/> }
 
               {/* <Review/> */}
               {/* <Cart/> */}
 
               {/* <Checkout/> */}
 
-             <Account/>
-             <OrderDetails/>
+             {/* <Account/> */}
+             {/* <OrderDetails/> */}
             
          
         </div>

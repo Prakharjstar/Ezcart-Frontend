@@ -4,11 +4,6 @@ import React, { useEffect, useState } from 'react'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
-
-
-
-
-
 const steps = [
 {name:"order Placed" , description: "on Thu , 11 Jul" , value: "PLACED" },
 {name:"Packed" , description: "Item Packed in Dispatch Warehouse" , value: "CONFIRM" },

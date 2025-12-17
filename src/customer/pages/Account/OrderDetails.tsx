@@ -1,9 +1,10 @@
-import { Box, Button } from '@mui/material'
+import { Box, Button, Divider } from '@mui/material'
 import React from 'react'
 import Orders from './Orders'
 import { Navigate, useNavigate } from 'react-router-dom'
 import OrderStepper from './OrderStepper'
-
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import { Payments } from '@mui/icons-material'
 const OrderDetails = () => {
   const navigate = useNavigate()
 
@@ -30,6 +31,40 @@ const OrderDetails = () => {
 
 
     </section>
+
+    <div className='border p-5'>
+        <h1 className='font-bold pb-3'> Delivery Address</h1>
+        <div className='text-sm spave-y-2'>
+            <div className='flex gap-5 font-medium'>
+                <p>{"Prakhar"}</p>
+                <Divider flexItem orientation='vertical'/>
+                <p>{9536830242}</p>
+            </div>
+            <p>
+                Vaishali Colony , Kahipur, Uttarakhand - 530068
+            </p>
+        </div>
+     </div>
+     <div className='border space-y-4'>
+
+        <div className='flex justify-between text-sm pt-5 px-5'>
+            <div className='space-y-1'>
+                <p className='font-bold'>Total Item Price</p>
+                <p>You saved <span className='text-green-500 font-medium text-xs'> rs {699}.00</span> on this item</p>
+            </div>
+            <p className='font-medium'>rs {799}.00</p>
+        </div>
+
+        <div className='px-5'>
+            <div className='bg-teal-50 px-5 py-2 text-xs font-medium flex items-center gap-3'>
+                <Payments/>
+                <p>Pay on Delivery</p>
+
+            </div>
+        </div>
+         
+         <Divider/>
+     </div>
    </Box>
   )
 }
