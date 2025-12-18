@@ -64,6 +64,14 @@ const OrderDetails = () => {
         </div>
          
          <Divider/>
+         <div className='px-5 pb-5'>
+            <p className='text-xs'> <strong>Sold by : </strong>{"Virani Clothing"}</p>
+
+         </div>
+
+         <div className='p-10'>
+            <Button disabled={true} color='error' sx={{py:"0.7ren"}} className='' variant='outlined' fullWidth>{true?"order canceled":"Cancel Order"}</Button>
+         </div>
      </div>
    </Box>
   )

@@ -30,15 +30,15 @@ function App() {
 
              {/* { <Product/>  } */}
 
-              { <ProductDetails/> }
+              {/* { <ProductDetails/> } */}
 
               {/* <Review/> */}
               {/* <Cart/> */}
 
               {/* <Checkout/> */}
 
-             {/* <Account/> */}
-             {/* <OrderDetails/> */}
+             { <Account/> }
+             {/* { <OrderDetails/> } */}
             
          
         </div>
