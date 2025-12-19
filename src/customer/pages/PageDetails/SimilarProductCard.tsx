@@ -7,7 +7,7 @@ const SimilarProductCard =()=>{
 
          <div className="group px-4 relative">
             <div >
-                 <img className='card-media object-top' src={"http://res.cloudinary.com/dxoqwusir/image/upload/v1727451023/green_1_tm1yuw.jpg"} alt=""    />
+                 <img className='h-full w-full object-cover' src={"http://res.cloudinary.com/dxoqwusir/image/upload/v1727451023/green_1_tm1yuw.jpg"} alt=""    />
             
            
             

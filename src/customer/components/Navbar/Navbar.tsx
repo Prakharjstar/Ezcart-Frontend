@@ -5,12 +5,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import { AddShoppingCart, Favorite, FavoriteBorder, Storefront } from "@mui/icons-material";
 import CategorySheet from "./CategorySheet";
 import mainCategory from "../../../data/category/mainCategory";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const theme=useTheme();
     const isLarge=useMediaQuery(theme.breakpoints.up("lg"));
     const [selectedCategory,setSelectedCategory]= useState("men");
     const [showCategorySheet , setShowCategorySheet]=useState(false);
+    const navigate = useNavigate()
     return(
         <>
             <Box className='bg-white sticky top-0 left-0 right-0' sx={{zIndex:2}}>
@@ -23,7 +25,7 @@ const Navbar = () => {
                   {!isLarge &&  <IconButton>
                         <MenuIcon className='text-gray-800'/>
                     </IconButton>}
-                    <h1 className='logo cursor-pointer text-2xl md:text-2xl text-[#009278]'>
+                    <h1 onClick={()=> navigate("/")} className='logo cursor-pointer text-2xl md:text-2xl text-[#009278]'>
                         Ezcart
                     </h1>
                     </div>
@@ -59,7 +61,7 @@ const Navbar = () => {
                     <FavoriteBorder className='text-red-400' sx={{fontSize: 29}}/>
                     </IconButton>
 
-                    <IconButton>
+                    <IconButton onClick={()=> navigate("cart")}>
                         <AddShoppingCart className='text-blue-800' sx ={{fontSize:29}}/>
                     </IconButton>
 
