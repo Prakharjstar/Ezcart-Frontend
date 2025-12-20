@@ -49,7 +49,7 @@ const Navbar = () => {
                         <SearchIcon className='text-gray-800'/>
                     </IconButton>
                     {
-                        true?<Button className='flex items-center gap-2'> 
+                        true?<Button onClick={()=> navigate("/account/orders")} className='flex items-center gap-2'> 
                              <Avatar
                              sx={{width: 29 , height: 29}}
                               src='https://th.bing.com/th/id/OIP.LLQPg_tu53I3Od8kXM5cFgHaNN?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' /><h1 className="font-semibold hidden lg:block text-[#009278]">Ezcart
@@ -65,7 +65,7 @@ const Navbar = () => {
                         <AddShoppingCart className='text-blue-800' sx ={{fontSize:29}}/>
                     </IconButton>
 
-                    { isLarge && <Button startIcon={<Storefront />} variant='outlined' ><h1 >Become Seller</h1> 
+                    { isLarge && <Button onClick={()=> navigate("become-seller")} startIcon={<Storefront />} variant='outlined' ><h1 >Become Seller</h1> 
                     </Button>}   
 
 
