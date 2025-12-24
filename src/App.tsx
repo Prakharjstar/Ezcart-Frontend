@@ -17,6 +17,7 @@ import Account from './customer/pages/Account/Account';
 import OrderDetails from './customer/pages/Account/OrderDetails';
 import { Route, Routes } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
+import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
 
 
 
@@ -52,6 +53,7 @@ function App() {
                <Route path="/checkout"  element= {<Checkout/>} />
                 <Route path="/account/*"  element= {<Account/>} />
                 <Route path="/become-seller"  element= {<BecomeSeller/>} />
+                <Route path="/seller/*"  element= {<SellerDashboard/>} />
             </Routes>
          
         </div>
