@@ -66,9 +66,9 @@ const menu2 = [
 
 const SellerDrawerList = ({toggleDrawer}:{toggleDrawer:any}) => {
   return (
-    <div>
+    
       <DrawerList menu={menu} menu2={menu2} toggleDrawer={toggleDrawer}/> 
-    </div>
+   
   )
 }
 
