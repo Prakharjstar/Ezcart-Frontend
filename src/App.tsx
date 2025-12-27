@@ -18,6 +18,7 @@ import OrderDetails from './customer/pages/Account/OrderDetails';
 import { Route, Routes } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
+import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
 
 
 
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/account/*"  element= {<Account/>} />
                 <Route path="/become-seller"  element= {<BecomeSeller/>} />
                 <Route path="/seller/*"  element= {<SellerDashboard/>} />
+               <Route path="/admin/*"  element= {<AdminDashboard/>} />
             </Routes>
          
         </div>
