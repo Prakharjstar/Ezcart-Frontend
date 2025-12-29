@@ -13,13 +13,13 @@ const AdminRoutes = () => {
   return (
     <div>
       <Routes>
-        <Route path ='/' element ={<SellersTable/>} />
-         <Route path ='/coupon' element ={<Coupons/>} />
-          <Route path ='/add-coupon' element ={<AddNewCouponform/>} />
-           <Route path ='/home-grid' element ={<GridTable/>} />
-            <Route path ='/electronics-category' element ={<ElectronicTable/>} />
-             <Route path ='/shop-bycategory' element ={<ShopByCategoryTable/>} />
-              <Route path ='/deals' element ={<Deal/>} />
+        <Route path='/' element={<SellersTable />} />
+        <Route path='/coupon' element={<Coupons />} />
+        <Route path='/add-coupon' element={<AddNewCouponform />} />
+        <Route path='/home-grid' element={<GridTable />} />
+        <Route path='/electronics-category' element={<ElectronicTable />} />
+        <Route path='/shop-bycategory' element={<ShopByCategoryTable />} />
+        <Route path='/deals' element={<Deal />} />
 
 
       </Routes>
