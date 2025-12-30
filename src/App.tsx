@@ -26,43 +26,31 @@ import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
 
 function App() {
   return (
-    
-      <ThemeProvider theme={customTheme}>
-        <div>
-      
-             {/* { <Home/>  } */}
 
-             {/* { <Product/>  } */}
+    <ThemeProvider theme={customTheme}>
+      <div>
 
-              {/* { <ProductDetails/> } */}
 
-              {/* <Review/> */}
-              {/* <Cart/> */}
+        {<Navbar />}
 
-              {/* <Checkout/> */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products/:category" element={<Product />} />
+          <Route path="/reviews/:productId" element={<Review />} />
+          <Route path="/product-details/:categoryId/:name/:productId" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/account/*" element={<Account />} />
+          <Route path="/become-seller" element={<BecomeSeller />} />
+          <Route path="/seller/*" element={<SellerDashboard />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
+        </Routes>
 
-             {/* { <Account/> } */}
-             {/* { <OrderDetails/> } */}
-                     {<Navbar/> }
-            
-            <Routes>
-              <Route path="/"  element= {<Home/>} />
-               <Route path="/products/:category"  element= {<Product/>} />
-               <Route path="/reviews/:productId"  element= {<Review/>} />
-               <Route path="/product-details/:categoryId/:name/:productId"  element= {<ProductDetails/>} />
-               <Route path="/cart"  element= {<Cart/>} />
-               <Route path="/checkout"  element= {<Checkout/>} />
-                <Route path="/account/*"  element= {<Account/>} />
-                <Route path="/become-seller"  element= {<BecomeSeller/>} />
-                <Route path="/seller/*"  element= {<SellerDashboard/>} />
-               <Route path="/admin/*"  element= {<AdminDashboard/>} />
-            </Routes>
-         
-        </div>
-      
-      </ThemeProvider>
-     
-  
+      </div>
+
+    </ThemeProvider>
+
+
   );
 }
 
