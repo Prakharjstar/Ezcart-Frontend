@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button, ThemeProvider } from '@mui/material';
@@ -19,12 +19,17 @@ import { Route, Routes } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
 import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
+import { fetchProducts } from './State/FetchProduct';
 
 
 
 
 
 function App() {
+
+  useEffect(()=>{
+    fetchProducts()
+  },[])
   return (
 
     <ThemeProvider theme={customTheme}>
