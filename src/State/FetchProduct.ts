@@ -1,15 +1,16 @@
-import axios from "axios";
+import axios from "axios"
 
-const api = "http://localhost:5454/products"
- export const fetchProducts = async()=>{
-    try{
+const api="http://localhost:5454/products"
 
-        const response = await axios.get(api)
+export const fetchProducts = async()=>{
+    try {
+        const response =await axios.get(api)
         console.log("response" , response)
-
-
-
-    }catch(error){
-        console.log(error);
+        
+        
+    } catch (error) 
+    {
+        console.log(error)
+        
     }
 }

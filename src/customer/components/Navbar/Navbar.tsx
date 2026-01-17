@@ -49,12 +49,12 @@ const Navbar = () => {
                         <SearchIcon className='text-gray-800'/>
                     </IconButton>
                     {
-                        true?<Button onClick={()=> navigate("/account/orders")} className='flex items-center gap-2'> 
+                        false?<Button onClick={()=> navigate("/account/orders")} className='flex items-center gap-2'> 
                              <Avatar
                              sx={{width: 29 , height: 29}}
                               src='https://th.bing.com/th/id/OIP.LLQPg_tu53I3Od8kXM5cFgHaNN?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' /><h1 className="font-semibold hidden lg:block text-[#009278]">Ezcart
                             </h1> 
-                            </Button> :<Button variant="contained">Login</Button>
+                            </Button> :<Button onClick={()=> navigate("/login")} variant="contained">Login</Button>
                     }
 
                     <IconButton>

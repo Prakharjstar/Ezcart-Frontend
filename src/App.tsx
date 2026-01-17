@@ -20,6 +20,7 @@ import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
 import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
 import { fetchProducts } from './State/FetchProduct';
+import Auth from './customer/pages/Auth/Auth';
 
 
 
@@ -49,6 +50,8 @@ function App() {
           <Route path="/become-seller" element={<BecomeSeller />} />
           <Route path="/seller/*" element={<SellerDashboard />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/login" element={<Auth/>} />
+         
         </Routes>
 
       </div>
