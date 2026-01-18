@@ -15,12 +15,14 @@ import Cart from './customer/pages/Cart/Cart';
 import Checkout from './customer/pages/Checkout/Checkout';
 import Account from './customer/pages/Account/Account';
 import OrderDetails from './customer/pages/Account/OrderDetails';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
 import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
 import { fetchProducts } from './State/FetchProduct';
 import Auth from './customer/pages/Auth/Auth';
+import { useAppDispatch, useAppSelector } from './State/store';
+import { fetchSellerProfile } from './State/seller/sellerSlice';
 
 
 
@@ -28,9 +30,22 @@ import Auth from './customer/pages/Auth/Auth';
 
 function App() {
 
+  const dispatch = useAppDispatch()
+  const {seller}=useAppSelector(store=>store)
+  const navigate = useNavigate()
+
   useEffect(()=>{
-    fetchProducts()
+    dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""))
+   
   },[])
+
+  useEffect(() =>{
+
+    if(seller.profile){
+      navigate("/seller")
+    }
+    
+  },[seller.profile])
   return (
 
     <ThemeProvider theme={customTheme}>

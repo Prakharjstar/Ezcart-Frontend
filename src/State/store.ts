@@ -1,14 +1,10 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import sellerSlice from "./seller/sellerSlice"
 
-const dummySlice = createSlice({
-  name: "dummy",
-  initialState: {},
-  reducers: {},
-});
 
 const rootReducer = combineReducers({
-  dummy: dummySlice.reducer, 
+ seller:sellerSlice,
 });
 
 const store = configureStore({

@@ -13,8 +13,8 @@ import { api } from "../config/api";
 
  export const Signin=createAsyncThunk<any,any>("/auth/signing" , async(loginRequest , {rejectWithValue})=>{
     try {
-         const payload = { ...loginRequest, role: "ROLE_SELLER" };
-        const response=await api.post("/auth/signing", payload   );
+       
+        const response=await api.post("/auth/signing", loginRequest  );
         console.log( "login otp "  ,response.data)
         
     } catch (error) {

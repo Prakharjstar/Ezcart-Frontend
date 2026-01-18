@@ -3,6 +3,7 @@ import { useFormik } from 'formik'
 import React from 'react'
 import { useAppDispatch } from '../../../State/store'
 import { sendLoginSignupOtp, Signin } from '../../../State/AuthSlice'
+import { SellerLogin } from '../../../State/seller/SellerAuthSlice'
 
 const SellerLoginForm=()=> {
   const dispatch=useAppDispatch()
@@ -13,7 +14,7 @@ const SellerLoginForm=()=> {
     },
     onSubmit:(values)=>{
       console.log("form data" , values)
-      dispatch(Signin(values))
+      dispatch(SellerLogin(values))
     }
   })
 
