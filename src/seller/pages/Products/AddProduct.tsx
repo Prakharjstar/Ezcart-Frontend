@@ -33,6 +33,7 @@ import colors from "../../../data/category/Filter/color";
 
 /* ===== CATEGORY DATA ===== */
 const categoryTwo: { [key: string]: any[] } = {
+  
   men: menLevelTwo,
   women: womenleveltwo,
   Kids: [],
@@ -328,42 +329,50 @@ const AddProduct = () => {
 
           {/* ================= CATEGORY LEVEL 2 ================= */}
           <Grid size ={{xs:12 , md:4 ,lg:4}}>
-            <FormControl fullWidth>
-              <InputLabel id = "category2-label">Second Category</InputLabel>
-              <Select
-                labelId="category2-label"
-                id="category"
-                name="category2"
-                value={formik.values.category2}
-                onChange={formik.handleChange}
-              >
-                {childCategory(categoryTwo[formik.values.category2] || [], formik.values.category2).map((cat: any) => (
-                  <MenuItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <FormControl fullWidth required disabled={!formik.values.category}>
+    <InputLabel id="category2-label">Second Category</InputLabel>
+    <Select
+      labelId="category2-label"
+      name="category2"
+      value={formik.values.category2}
+      onChange={(e) => {
+        formik.setFieldValue("category2", e.target.value);
+        formik.setFieldValue("category3", ""); // reset level 3
+      }}
+    >
+      {(categoryTwo[formik.values.category] || []).map((cat: any) => (
+        <MenuItem key={cat.categoryId} value={cat.categoryId}>
+          {cat.name}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+
+
           </Grid>
 
           {/* ================= CATEGORY LEVEL 3 ================= */}
           <Grid size ={{xs:12 , md:4 ,lg:4}}>
-            <FormControl fullWidth>
-              <InputLabel id="category3-label">Sub Category Level 3</InputLabel>
-              <Select
-                label="category3-label"
-                name="category3"
-                id="category"
-                value={formik.values.category3}
-                onChange={formik.handleChange}
-              >
-                {childCategory(categoryThree[formik.values.category] || [], formik.values.category2).map((cat: any) => (
-                  <MenuItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          
+           <FormControl fullWidth required disabled={!formik.values.category2}>
+    <InputLabel id="category3-label">Sub Category Level 3</InputLabel>
+    <Select
+      labelId="category3-label"
+      id="category3"
+      name="category3"
+      value={formik.values.category3}
+      onChange={formik.handleChange}
+    >
+      {(categoryThree[formik.values.category] || [])
+        .filter((item: any) => item.parentCategoryId === formik.values.category2)
+        .map((item: any) => (
+          <MenuItem key={item.categoryId} value={item.categoryId}>
+            {item.name}
+          </MenuItem>
+        ))}
+    </Select>
+  </FormControl>
+          
           </Grid>
 
           {/* ================= SUBMIT ================= */}
