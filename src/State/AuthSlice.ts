@@ -21,3 +21,16 @@ import { api } from "../config/api";
         console.log( "error --- " , error)
     }
 })
+
+export const logout = createAsyncThunk<any,any>("/auth/logout",
+    async(navigate,{rejectWithValue})=>{
+        try{
+             localStorage.clear();
+            console.log("logout success")
+            navigate("/")
+
+        }catch(error){
+            console.log("error - - - " , error);
+        }
+    }
+)

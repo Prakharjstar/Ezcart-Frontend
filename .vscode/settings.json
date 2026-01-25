@@ -1,6 +1,6 @@
 {
     "vscode-pets.petSize": "medium",
-    "vscode-pets.disableEffects": true,
+    "vscode-pets.disableEffects": false,
     "vscode-pets.petType": "frog",
     "vscode-pets.theme": "beach",
     "vscode-pets.throwBallWithMouse": true,
