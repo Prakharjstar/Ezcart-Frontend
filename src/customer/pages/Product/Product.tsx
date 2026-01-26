@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterSection from "./FilterSection";
 import ProductCard from "./ProductCard";
 import { Box, Divider, FormControl, IconButton, InputLabel, MenuItem, Pagination, Select, useMediaQuery, useTheme } from "@mui/material";
 import { FilterAlt, Sort } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../../State/store";
+import { fetchAllProducts } from "../../../State/customer/ProductSlice";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const Product= ()=>{
     const theme = useTheme()
     const isLarge = useMediaQuery(theme.breakpoints.up("lg"))
     const[sort,setSort]= useState()
     const[page,setPage]= useState(1);
+    const dispatch = useAppDispatch();
+    const [searchParams , setSearchParams] = useSearchParams();
+     const {category} = useParams();
+     const {product} = useAppSelector((store=> store))
 
 
     const handleSortChange = (event:any) =>{
@@ -18,6 +25,26 @@ const Product= ()=>{
     const handlePageChange= ( value:number)=>{
       setPage(value)
     }
+
+    useEffect(()=>{
+      const [minPrice , maxPrice] = searchParams.get("price")?.split("-")|| [];
+      const color = searchParams.get("color") || searchParams.get("Color");
+     const  minDiscount=searchParams.get("discount")?Number(searchParams.get("discount")):undefined;
+      const pageNumber = page-1;
+
+      const newFilter = {
+        color:color || "",
+        minPrice : minPrice?Number(minPrice):undefined,
+        maxPrice: maxPrice?Number(maxPrice):undefined,
+        sort,
+        minDiscount ,
+        pageNumber
+
+      }
+      
+      dispatch(fetchAllProducts(newFilter))
+
+    },[category, searchParams, sort, page])
     return (
         <div className='-z-10 mt-10'>
             <div>
@@ -55,20 +82,20 @@ const Product= ()=>{
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    value={Sort}
+    value={sort || ""} 
     label="Age"
     onChange={handleSortChange}
   >
-    <MenuItem value={"price_low"}>Price : Low - High</MenuItem>
-    <MenuItem value={"prive_high"}>Price : High - Low</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
+   <MenuItem value="price_low">Price : Low - High</MenuItem>
+   <MenuItem value="price_high">Price : High - Low</MenuItem>
+   
   </Select>
 </FormControl>
                         </div>
 
                         <Divider/>
                  <section className="product_section grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5 justify-center">
-                    {[1,1,1,1,1,1].map((item)=><ProductCard/>)}
+                    {product.products.map((item)=><ProductCard item={item}/>)}
 
 
                    

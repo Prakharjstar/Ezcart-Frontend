@@ -7,13 +7,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { AddShoppingCart, CurtainsTwoTone, FavoriteBorder, LocalShipping, Remove, Shield, Wallet, WorkspacePremium } from "@mui/icons-material";
 import SimilarProduct from "./SimilarProduct";
 import ReviewCard from "../Review/ReviewCard";
+import { useAppDispatch } from "../../../State/store";
 const ProductDetails = ()=>{
    const[quantity , setQuantity] = useState(1);
-
-
-
-
-
+  
     return (
         <div className="px-5 lg:px-20 pt-10">
 

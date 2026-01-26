@@ -4,12 +4,11 @@ import "./ProductCard.css"
 import { Favorite, ModeComment } from "@mui/icons-material";
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { teal } from "@mui/material/colors";
+import { Product } from "../../../types/ProductTypes";
 
-const images=[
-    "https://www.yourdesignerwear.com/media/catalog/product/cache/a0979443816098060a7c4564522c3a96/r/a/rani-pink-meenakari-weaving-dola-silk-saree-prf238303.jpg","https://resources.indianclothstore.com/productimages/Magenta-Banarasi-Silk-Saree-With-Blouse-206611032025.jpg"
-]
 
-const ProductCard = ()=>{
+
+const ProductCard = ({item}:{item:Product})=>{
 
     const[currentImage,setCurrentImage]=useState(0)
     const[isHovered , setIsHovered]=useState(false)
@@ -20,7 +19,7 @@ const ProductCard = ()=>{
 
     if(isHovered){
         interval=setInterval(()=>{
-            setCurrentImage((prevImage) => (prevImage+1) % images.length);
+            setCurrentImage((prevImage) => (prevImage+1) % item.images.length);
         },1000 )
     }
     else if(interval){
@@ -34,7 +33,7 @@ const ProductCard = ()=>{
 
         <div className="group px-4 relative">
             <div className='card' onMouseEnter={()=> setIsHovered(true)} onMouseLeave={()=> setIsHovered(false)}  >
-                {images.map((item,index)=> <img className='card-media object-top' src={item} alt=""  style={{transform:`translateX(${(index-currentImage)*100}%)`}}  />)}
+                {item.images.map((item,index)=> <img className='card-media object-top' src={item} alt=""  style={{transform:`translateX(${(index-currentImage)*100}%)`}}  />)}
             
             { isHovered && <div className="indicator flex flex-col items-center space-y-2">
                 <div className="flex gap-3">
@@ -59,17 +58,17 @@ const ProductCard = ()=>{
 
             <div className="details pt-3 space-y-1 group-hover-effect rounded-md">
                 <div className="name">
-                    <h1>MOHEYS</h1>
-                    <p> Red Saree</p>
+                    <h1>{item.seller?.businessDetails.businessName}</h1>
+                    <p>{item.title}</p>
 
                 </div>
 
                 <div className="price flex items-center gap-3">
 
-                <span className="font-sans text-gray-800"> <CurrencyRupeeIcon sx={{fontSize :12}}/> 1200
+                <span className="font-sans text-gray-800"> <CurrencyRupeeIcon sx={{fontSize :12}}/> {item.sellingPrice}
                 </span>
-                <span className="thin-line-through text-gray-400"> <CurrencyRupeeIcon sx={{fontSize :12}}/> 2000</span>
-                <span className="text-green-500 font-semibold">60%</span> 
+                <span className="thin-line-through text-gray-400"> <CurrencyRupeeIcon sx={{fontSize :12}}/> {item.mrpPrice}</span>
+                <span className="text-green-500 font-semibold">{item.discountPercent}%</span> 
 
 
                 </div>

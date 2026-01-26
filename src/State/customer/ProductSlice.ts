@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
-import { api, API_URL } from "../../config/api";
+import { api} from "../../config/api";
 import { Product } from "../../types/ProductTypes";
 
+
+const API_URL ="/products"
 
 export const fetchProductById=createAsyncThunk("products/fetchProductById", 
     async(productId , {rejectWithValue})=>{
@@ -9,7 +11,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
             const response = await api.get(`${API_URL}/${productId}`)
           
             const data = response.data;
-            console.log("data " + data)
+            console.log("data " , data)
             return data
 
         }catch(error:any){
@@ -30,7 +32,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
             });
           
             const data = response.data;
-            console.log("search product data " + data)
+            console.log("search product data " ,data)
             return data
 
         }catch(error:any){
@@ -52,7 +54,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
             });
           
             const data = response.data;
-            console.log("All product data " + data)
+            console.log("All product data " ,data)
             return data
 
         }catch(error:any){
@@ -67,7 +69,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
     product:Product |null;
     products:Product[];
     totalPages:number;
-    loading: Boolean;
+    loading: boolean;
     error: string | null | any;
     searchProduct:Product[]
  }
@@ -94,6 +96,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
         builder.addCase(fetchProductById.fulfilled, (state , action)=>{
             state.loading = false;
             state.product=action.payload;
+            
         });
         builder.addCase(fetchProductById.rejected , (state,action)=>{
             state.loading = false;
@@ -106,7 +109,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
 
         builder.addCase(fetchAllProducts.fulfilled, (state , action)=>{
             state.loading = false;
-            state.products=action.payload;
+            state.products=action.payload.content;
         });
         builder.addCase(fetchAllProducts.rejected , (state,action)=>{
             state.loading = false;
