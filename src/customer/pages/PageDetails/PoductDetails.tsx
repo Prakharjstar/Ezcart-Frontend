@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { teal } from "@mui/material/colors";
 import { Button, Divider } from "@mui/material";
@@ -7,10 +7,24 @@ import AddIcon from '@mui/icons-material/Add';
 import { AddShoppingCart, CurtainsTwoTone, FavoriteBorder, LocalShipping, Remove, Shield, Wallet, WorkspacePremium } from "@mui/icons-material";
 import SimilarProduct from "./SimilarProduct";
 import ReviewCard from "../Review/ReviewCard";
-import { useAppDispatch } from "../../../State/store";
+import { useAppDispatch, useAppSelector } from "../../../State/store";
+import { useParams } from "react-router-dom";
+import { fetchProductById } from "../../../State/customer/ProductSlice";
 const ProductDetails = ()=>{
-   const[quantity , setQuantity] = useState(1);
-  
+   const[quantity , setQuantity] = useState(1)
+   const dispatch = useAppDispatch()
+   const {productId}=useParams()
+   const {product} = useAppSelector(store=>store)
+   const [activeImage , setActiveImage] = useState(0)
+
+   useEffect(()=>{
+    dispatch(fetchProductById(Number(productId)))
+   },[productId])
+
+
+   const handleActiveImage=(value:number)=>()=>{
+    setActiveImage(value)
+   }
     return (
         <div className="px-5 lg:px-20 pt-10">
 
@@ -18,20 +32,20 @@ const ProductDetails = ()=>{
                 <section className="flex flex-col lg:flex-row gap-5">
 
                     <div className="w-full lg:w-[15%]  flex flex-wrap lg:flex-col gap-3">
-                        {[1,1,1,1].map((item)=> <img className="lg:w-full w-[50px] cursor-pointer rounded-md" src= "http://res.cloudinary.com/dxoqwusir/image/upload/v1727451187/SoftSilkZariBanarasiSaree_1_fwms3w.jpg" alt="" />)}
+                        {product.product?.images.map((item , index)=> <img onClick={handleActiveImage(index)} className="lg:w-full w-[50px] cursor-pointer rounded-md" src= {item} alt="" />)}
 
                     </div>
 
                     <div className=" w-full lg:w-[85%]">
-                        <img className="w-full rounded-md" src="http://res.cloudinary.com/dxoqwusir/image/upload/v1727451205/SoftSilkZariBanarasiSaree_4_fyohzg.jpg" alt="" />
+                        <img className="w-full rounded-md" src={product.product?.images[activeImage]} alt="" />
 
 
                     </div>
                 </section>
 
                 <section>
-                  <h1 className="font-bold text-lg text-primary-color ">Raam Clothing</h1>
-                   <p className="text-gray-500 font-semibold"> men black shirt </p>
+                  <h1 className="font-bold text-lg text-primary-color ">{product.product?.seller?.businessDetails.businessName}</h1>
+                   <p className="text-gray-500 font-semibold">{product.product?.title} </p>
                    <div className="flex justify-between items-center py-2 border w-[180px] px-3 mt-5">
                     <div className="flex gap-1 items-center">
                          <span>4</span> <StarRateIcon sx={{color:teal[500],fontSize:"17px"}} />
@@ -44,10 +58,10 @@ const ProductDetails = ()=>{
                     <div>
                         <div className="price flex items-center gap-3 mt-5 text-2xl">
 
-                <span className="font-sans text-gray-800"> <CurrencyRupeeIcon/>1200
+                <span className="font-sans text-gray-800"> <CurrencyRupeeIcon/>{product.product?.sellingPrice}
                 </span>
-                <span className="line-through text-gray-400"> <CurrencyRupeeIcon/>2000</span>
-                <span className="text-green-500 font-semibold">60%</span> 
+                <span className="line-through text-gray-400"> <CurrencyRupeeIcon/>{product.product?.mrpPrice}</span>
+                <span className="text-green-500 font-semibold">{product.product?.discountPercent}</span> 
 
 
                 </div>
@@ -118,8 +132,7 @@ const ProductDetails = ()=>{
                   </div>
 
                        <div className="mt-5 font-semibold">
-                        <p>The saree comes with an unstitched blouse piece The blouse worn by the model might be for modelling purpose only.
-                            Check the image of the blouse piece to undersatand how the actual blouse piece looks like.
+                        <p>{product.product?.description}
                         </p>
                        </div>
 

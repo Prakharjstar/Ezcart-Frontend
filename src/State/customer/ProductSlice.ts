@@ -5,7 +5,7 @@ import { Product } from "../../types/ProductTypes";
 
 const API_URL ="/products"
 
-export const fetchProductById=createAsyncThunk("products/fetchProductById", 
+export const fetchProductById=createAsyncThunk<Product , any>("products/fetchProductById", 
     async(productId , {rejectWithValue})=>{
         try{
             const response = await api.get(`${API_URL}/${productId}`)
@@ -43,7 +43,7 @@ export const fetchProductById=createAsyncThunk("products/fetchProductById",
  )
 
  
- export const fetchAllProducts=createAsyncThunk<any , any>("products/fetchAllProducts", 
+ export const fetchAllProducts=createAsyncThunk<any,any>("products/fetchAllProducts", 
     async(params , {rejectWithValue})=>{
         try{
             const response = await api.get(`${API_URL}`,{

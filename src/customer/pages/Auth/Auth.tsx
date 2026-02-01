@@ -1,58 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextField, Card, Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Loginform from "./Loginform";
+import Registerform from "./Registerform";
 
 const Auth = () => {
-  const navigate = useNavigate();
+ const [isLogin , setIsLogin] =useState(true);
 
-  return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-<Card className="p-10 w-[380px] min-h-[520px] space-y-8 flex flex-col items-center justify-center -mt-20">
+ return(
+  <div className="flex justify-center h -[90vh] items-center">
+    <div className="max-w-md h-[85] rounded-md shadow-lg">
+      <img src= "https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="" />
 
+     <div className="mt-8 px-10">
+       {isLogin ? <Loginform/> : <Registerform/>}
 
-      
-        <Avatar
-          src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
-          sx={{ width: 80, height: 80 }}
-        />
+      <div className="flex items-center gap-1 justify-center mt-5">
+        <p>{isLogin && "Don't"} have Account </p>
+        <Button size="small" onClick={()=>setIsLogin(!isLogin)}>{isLogin?"Create Account" : "login"}</Button>
 
-        <h1 className="text-2xl font-semibold text-center text-[#009278] cursor-pointer">
-          Login to Ezcart
-        </h1>
-
-        <TextField
-          fullWidth
-          label="Email"
-          type="email"
-          placeholder="Enter your email"
-        />
-
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{
-            backgroundColor: "#009278",
-            paddingY: "10px",
-            fontWeight: "bold",
-            "&:hover": { backgroundColor: "#007f6d" }
-          }}
-        >
-          Send OTP
-        </Button>
-
-        <p className="text-sm text-center">
-          Don’t have an account?{" "}
-          <span
-            className="text-[#009278] cursor-pointer font-semibold"
-            onClick={() => navigate("/register")}
-          >
-            Create Account
-          </span>
-        </p>
-
-      </Card>
+      </div>
+     </div>
     </div>
-  );
-};
 
+  </div>
+ )
+  
+}
 export default Auth;
+
