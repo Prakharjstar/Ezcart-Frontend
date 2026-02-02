@@ -5,6 +5,9 @@ import Orders from './Orders';
 import OrderDetails from './OrderDetails';
 import UserDetails from './UserDetails';
 import Address from './Address';
+import { useAppDispatch } from '../../../State/store';
+import { logout, logoutThunk } from '../../../State/AuthSlice';
+
 
 
 const menu = [
@@ -17,13 +20,24 @@ const menu = [
 ]
 
 
-
-
 function Account() {
 
     const navigate = useNavigate();
-    const handleClick = (item: any) => navigate(item.path);
-    const location = useLocation();
+     const location = useLocation();
+     const dispatch = useAppDispatch();
+
+
+    
+const handleClick = (item: any) => { 
+    if(item.name === "Logout"){      
+        dispatch(logoutThunk()).then(() => { 
+            navigate("/login");       
+        });
+        return;                       
+    }
+    navigate(item.path);
+}
+   
 
     return (
         <div className='px-5 lg:px-52 min-h-screen mt-10'>

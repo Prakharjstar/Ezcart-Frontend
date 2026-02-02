@@ -6,6 +6,7 @@ import { AddShoppingCart, Favorite, FavoriteBorder, Storefront } from "@mui/icon
 import CategorySheet from "./CategorySheet";
 import mainCategory from "../../../data/category/mainCategory";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../State/store";
 
 const Navbar = () => {
     const theme=useTheme();
@@ -13,6 +14,7 @@ const Navbar = () => {
     const [selectedCategory,setSelectedCategory]= useState("men");
     const [showCategorySheet , setShowCategorySheet]=useState(false);
     const navigate = useNavigate()
+    const {auth} = useAppSelector(store=>store)
     return(
         <>
             <Box className='bg-white sticky top-0 left-0 right-0' sx={{zIndex:2}}>
@@ -49,10 +51,10 @@ const Navbar = () => {
                         <SearchIcon className='text-gray-800'/>
                     </IconButton>
                     {
-                        false?<Button onClick={()=> navigate("/account/orders")} className='flex items-center gap-2'> 
+                        auth.user ? <Button onClick={()=> navigate("/account/orders")} className='flex items-center gap-2'> 
                              <Avatar
                              sx={{width: 29 , height: 29}}
-                              src='https://th.bing.com/th/id/OIP.LLQPg_tu53I3Od8kXM5cFgHaNN?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' /><h1 className="font-semibold hidden lg:block text-[#009278]">Ezcart
+                              src='https://th.bing.com/th/id/OIP.LLQPg_tu53I3Od8kXM5cFgHaNN?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3' /><h1 className="font-semibold hidden lg:block text-[#009278]">{auth.user?.fullName}
                             </h1> 
                             </Button> :<Button onClick={()=> navigate("/login")} variant="contained">Login</Button>
                     }

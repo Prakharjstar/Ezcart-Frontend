@@ -24,7 +24,8 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
     const dispatch =useAppDispatch();
 
     const handleLogout=()=>{
-        dispatch(logout(navigate))
+        dispatch(logout());
+        navigate("/")
     }
   return (
     <div className='h-full'>

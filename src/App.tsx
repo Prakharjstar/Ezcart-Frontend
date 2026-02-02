@@ -23,6 +23,7 @@ import { fetchProducts } from './State/FetchProduct';
 import Auth from './customer/pages/Auth/Auth';
 import { useAppDispatch, useAppSelector } from './State/store';
 import { fetchSellerProfile } from './State/seller/sellerSlice';
+import { fetchUserProfile } from './State/AuthSlice';
 
 
 
@@ -31,7 +32,7 @@ import { fetchSellerProfile } from './State/seller/sellerSlice';
 function App() {
 
   const dispatch = useAppDispatch()
-  const {seller}=useAppSelector(store=>store)
+  const {seller,auth}=useAppSelector(store=>store)
   const navigate = useNavigate()
 
   useEffect(()=>{
@@ -39,17 +40,36 @@ function App() {
    
   },[])
 
-  useEffect(() =>{
-
-    if(seller.profile){
-      navigate("/seller")
+  useEffect(() => {
+  const jwt = auth.jwt || localStorage.getItem("jwt");
+  if (jwt) {
+   
+    dispatch(fetchUserProfile({ jwt }));
+  
+    if (auth.user?.role === "ROLE_SELLER") {
+      dispatch(fetchSellerProfile(jwt));
     }
-    
-  },[seller.profile])
+  }
+}, [auth.jwt]);
+
+useEffect(() => {
+ 
+  if (auth.user?.role === "ROLE_SELLER") {
+    navigate("/seller");
+  } else if (auth.user?.role === "ROLE_CUSTOMER") {
+    navigate("/"); 
+  }
+}, [auth.user]);
+
+  useEffect(()=>{
+    dispatch(fetchUserProfile({jwt: auth.jwt || localStorage.getItem("jwt")}))
+
+  },[auth.jwt])
   return (
 
     <ThemeProvider theme={customTheme}>
       <div>
+      
 
 
         {<Navbar />}

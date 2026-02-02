@@ -73,7 +73,7 @@ const Registerform = () => {
 
        { false && <Button onClick={handleSendOtp} fullWidth variant='contained' sx={{py:"11px"}}>Sent Otp</Button>} 
 
-        <Button onClick={()=>formik.handleSubmit()} fullWidth variant='contained' sx={{py:"11px"}}>Login</Button>
+        <Button onClick={()=>formik.handleSubmit()} fullWidth variant='contained' sx={{py:"11px"}}>Signup</Button>
 
       </div>
 
