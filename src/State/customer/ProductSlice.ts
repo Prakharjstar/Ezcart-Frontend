@@ -16,7 +16,7 @@ export const fetchProductById=createAsyncThunk<Product , any>("products/fetchPro
 
         }catch(error:any){
             console.log("error -- " + error)
-            rejectWithValue(error.message)
+           return rejectWithValue(error.message)
         }
     }
  )
@@ -37,7 +37,7 @@ export const fetchProductById=createAsyncThunk<Product , any>("products/fetchPro
 
         }catch(error:any){
             console.log("error -- " + error)
-            rejectWithValue(error.message)
+           return rejectWithValue(error.message)
         }
     }
  )
@@ -59,7 +59,7 @@ export const fetchProductById=createAsyncThunk<Product , any>("products/fetchPro
 
         }catch(error:any){
             console.log("error -- " + error)
-            rejectWithValue(error.message)
+           return rejectWithValue(error.message)
         }
     }
  )
@@ -70,7 +70,7 @@ export const fetchProductById=createAsyncThunk<Product , any>("products/fetchPro
     products:Product[];
     totalPages:number;
     loading: boolean;
-    error: string | null | any;
+    error: string | null |any;
     searchProduct:Product[]
  }
 

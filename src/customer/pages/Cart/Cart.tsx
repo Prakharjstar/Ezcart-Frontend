@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import CartItem from "./CartItem";
+import React, { useEffect, useState } from "react";
+
 import { Close, LocalOffer } from "@mui/icons-material";
 import { teal } from "@mui/material/colors";
 import { Button, IconButton, TextField, useScrollTrigger } from "@mui/material";
 import PricingCard from "./PricingCard";
 import { Navigate, useNavigate } from "react-router-dom";
+import CartItem from "./CartItem";
+import { useAppDispatch } from "../../../State/store";
+import { fetchUserCart } from "../../../State/customer/CartSlice";
 
 
      
@@ -19,6 +22,12 @@ const Cart = ()=>{
 
 
     }
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        dispatch(fetchUserCart(localStorage.getItem("jwt") ||""))
+
+    },[])
     return(
         <div className="pt-10 px-5 sm:px-10 md:px-60 min-h-screen">
 

@@ -4,6 +4,7 @@ import sellerSlice from "./seller/sellerSlice"
 import sellerProductSlice from "./seller/sellerProductSlice";
 import productSlice from "./customer/ProductSlice";
 import authSlice from "./AuthSlice";
+import cartSlice from "./customer/CartSlice"
 
 
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
  sellerProduct:sellerProductSlice,
  product:productSlice,
  auth:authSlice,
+ cart:cartSlice,
 
 });
 
