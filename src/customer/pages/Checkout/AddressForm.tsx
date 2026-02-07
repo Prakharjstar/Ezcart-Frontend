@@ -2,22 +2,27 @@ import { Box, Button, Grid, TextField } from '@mui/material'
 import { Formik, useFormik } from 'formik'
 import React from 'react'
 import * as Yup from "yup"
+import { useAppDispatch } from '../../../State/store'
+import { createOrder } from '../../../State/customer/orderSlice'
+import { Address } from   "../../../types/userTypes";
 
 
 const AddressFormSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   mobile: Yup.string().required("Mobile number is required").matches(/^[6-9]\d{9}$/, "Invalid mobile number" ),
-  pinCode: Yup.string().required("Pin code is required").matches(/^[1-9][0-9]{6}$/,"Invalid pin code"),
+  pinCode: Yup.string().required("Pin code is required").matches(/^[1-9][0-9]{5}$/,"Invalid pin code"),
   address : Yup.string().required("Address is required"),
   city: Yup.string().required("City is required"),
   state: Yup.string().required("State is required"),
   locality: Yup.string().required("Locality is required"),
 })
 
-const AddressForm =()=> {
-  const formik = useFormik({
+const AddressForm =({paymentGateway}:any)=> {
+
+  const dispatch = useAppDispatch()
+  const formik = useFormik<Address>({
       initialValues:{
-        name: '',
+        name: "",
         mobile:"",
         pinCode: "",
         address: "",
@@ -27,8 +32,9 @@ const AddressForm =()=> {
         
       },
       validationSchema: AddressFormSchema,
-      onSubmit: (values) => {
+      onSubmit: (values)=> {
         console.log(values);
+        dispatch(createOrder({ address:values, jwt:localStorage.getItem("jwt") || "" , paymentGateway:"RAZORPAY"}))
       },
 
   });
@@ -162,7 +168,7 @@ const AddressForm =()=> {
 
           </Grid>
 
-          <Grid size={{xs:12}}>
+          <Grid size={12}>
               
               <Button fullWidth variant='contained' type='submit' sx={{py:"14px"}}> Add Address</Button>
 

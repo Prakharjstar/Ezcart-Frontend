@@ -4,7 +4,7 @@ export interface Address{
     mobile:string;
     pinCode:string;
     address:string;
-    loacality:string;
+    locality:string;
     city:string;
     state:string;
 }

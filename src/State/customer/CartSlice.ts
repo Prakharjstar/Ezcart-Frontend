@@ -46,7 +46,7 @@ export const fetchUserCart = createAsyncThunk<Cart, string>(
   }
 );
 
-// Add item
+
 interface AddItemRequest {
   productId: number | undefined;
   size: string;
@@ -69,7 +69,7 @@ export const addItemToCart = createAsyncThunk<
   }
 });
 
-// Delete item
+
 export const deleteCartItem = createAsyncThunk<
   any,
   { jwt: string; cartItemId: number }
@@ -97,6 +97,7 @@ export const updateCartItem = createAsyncThunk<
       const response = await api.put(`${API_URL}/item/${cartItemId}`, cartItem, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
+      console.log("Cart item updated successfully " , response.data)
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
