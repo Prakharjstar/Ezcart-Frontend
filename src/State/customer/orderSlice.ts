@@ -53,9 +53,14 @@ export const fetchOrderById = createAsyncThunk<Order ,{orderId: number , jwt:str
     }
 });
 
-
 export const createOrder = createAsyncThunk<
-  { payment_link_url: string },
+  {
+    payment_link_url: any;
+    orderId: string;
+    amount: number;
+    currency: string;
+    key: string;
+  },
   { address: Address; jwt: string; paymentGateway: string }
 >(
   "orders/createOrder",
@@ -73,7 +78,7 @@ export const createOrder = createAsyncThunk<
       );
 
       console.log("order created", response.data);
-      return response.data;
+      return response.data; 
     } catch (error: any) {
       console.error("order creation error", error.response?.data || error.message);
       return rejectWithValue(error.response?.data || "Failed to create order");

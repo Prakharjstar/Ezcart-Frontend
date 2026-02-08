@@ -3,7 +3,7 @@ import { Formik, useFormik } from 'formik'
 import React from 'react'
 import * as Yup from "yup"
 import { useAppDispatch } from '../../../State/store'
-import { createOrder } from '../../../State/customer/orderSlice'
+import { createOrder, paymentSuccess } from '../../../State/customer/orderSlice'
 import { Address } from   "../../../types/userTypes";
 
 
@@ -32,11 +32,30 @@ const AddressForm =({paymentGateway}:any)=> {
         
       },
       validationSchema: AddressFormSchema,
-      onSubmit: (values)=> {
-        console.log(values);
-        dispatch(createOrder({ address:values, jwt:localStorage.getItem("jwt") || "" , paymentGateway:"RAZORPAY"}))
-      },
+   onSubmit: async (values) => {
+  try {
+    const res = await dispatch(
+      createOrder({
+        address: values,
+        jwt: localStorage.getItem("jwt") || "",
+        paymentGateway: "RAZORPAY",  // ya "STRIPE" agar Stripe use karna ho
+      })
+    ).unwrap();
 
+    console.log("PAYMENT RESPONSE 👉", res);
+
+    if (res.payment_link_url) {
+      // Option 2: Open the payment link in new tab
+      window.open(res.payment_link_url, "_blank");
+      
+      // ya agar same tab me redirect karna ho:
+      // window.location.href = res.payment_link_url;
+    }
+
+  } catch (err) {
+    console.error("Order creation failed", err);
+  }
+}
   });
 
   
@@ -161,20 +180,13 @@ const AddressForm =({paymentGateway}:any)=> {
             onChange={formik.handleChange}
             error={formik.touched.state&& Boolean(formik.errors.state)}
             helperText={formik.touched.state && formik.errors.state}
-
-            
-            
+ 
             />
-
           </Grid>
-
           <Grid size={12}>
-              
-              <Button fullWidth variant='contained' type='submit' sx={{py:"14px"}}> Add Address</Button>
-
+                   <Button fullWidth variant='contained' type='submit' sx={{py:"14px"}}> Add Address</Button>
+                    </Grid>
           </Grid>
-          
-        </Grid>
       </form>
       
     </Box>
