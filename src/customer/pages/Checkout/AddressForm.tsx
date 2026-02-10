@@ -38,11 +38,11 @@ const AddressForm =({paymentGateway}:any)=> {
       createOrder({
         address: values,
         jwt: localStorage.getItem("jwt") || "",
-        paymentGateway: "RAZORPAY",  // ya "STRIPE" agar Stripe use karna ho
+        paymentGateway: "RAZORPAY",  
       })
     ).unwrap();
 
-    console.log("PAYMENT RESPONSE 👉", res);
+    console.log("PAYMENT RESPONSE ", res);
 
     if (res.payment_link_url) {
       // Option 2: Open the payment link in new tab

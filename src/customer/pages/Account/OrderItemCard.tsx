@@ -2,10 +2,13 @@ import { CalendarViewDay, ElectricBolt, Inventory2, Schedule } from '@mui/icons-
 import { Avatar } from '@mui/material'
 import { teal } from '@mui/material/colors'
 import React from 'react'
+import { Order, OrderItem } from '../../../types/orderTypes'
+import { useNavigate } from 'react-router-dom'
 
-function OrderItem() {
+function OrderItemCard({item ,order}:{item:OrderItem , order:Order}) {
+    const navigate = useNavigate();
   return (
-    <div className='text-sm bg-white p-5 space-y-4 border rounded-md cursor-pointer'>
+    <div onClick={()=> navigate(`/account/order/${order.id}/${item.id}`)} className='text-sm bg-white p-5 space-y-4 border rounded-md cursor-pointer'>
 
         <div className='flex items-center gap-5'>
 
@@ -17,18 +20,18 @@ function OrderItem() {
 
             <div>
                 <h1 className='font-bold text-primary-color'>PENDING</h1>
-                <p>Arriving By Mon, 15 Oct</p>
+                <p>Arriving By {order.deliverDate}</p>
             </div>
         </div>
 
         <div className='p-5 bg-teal-50 flex gap-3'>
 
-            <div><img className='w-[70px]' src="http://res.cloudinary.com/dxoqwusir/image/upload/v1727452042/pro-ray-android-ios-cellecor-yes-original-imagydnsrany7qhy_1_m9n9t5.webp" alt="" />
+            <div><img className='w-[70px]' src= {item.product.images[0]} alt="" />
             </div>
 
             <div className='w-full space-y-2'>
-                <h1 className='font-bold'>Bolt</h1>
-                <p>Cellecor RAY 1.43" AMOLED Display | 700 NITS | BT-Calling | AI Voice| Split Screen Smarwatch (Black Strap , Free Size)</p>
+                <h1 className='font-bold'>{item.product.seller?.businessDetails.businessName}</h1>
+                <p>{item.product.title}</p>
                 <p><strong>size :</strong>FREE</p>
             </div>
             
@@ -39,4 +42,4 @@ function OrderItem() {
   )
 }
 
-export default OrderItem
+export default OrderItemCard
