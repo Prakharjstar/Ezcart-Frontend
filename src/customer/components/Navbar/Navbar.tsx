@@ -59,7 +59,7 @@ const Navbar = () => {
                             </Button> :<Button onClick={()=> navigate("/login")} variant="contained">Login</Button>
                     }
 
-                    <IconButton>
+                    <IconButton onClick={()=> navigate("/wishlist")}>
                     <FavoriteBorder className='text-red-400' sx={{fontSize: 29}}/>
                     </IconButton>
 

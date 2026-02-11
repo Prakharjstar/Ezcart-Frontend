@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from './State/store';
 import { fetchSellerProfile } from './State/seller/sellerSlice';
 import { fetchUserProfile } from './State/AuthSlice';
 import PaymentSuccess from './customer/pages/PaymentSuccess';
+import WishList from './customer/WishList/WishList';
 
 
 
@@ -81,6 +82,7 @@ useEffect(() => {
           <Route path="/reviews/:productId" element={<Review />} />
           <Route path="/product-details/:categoryId/:name/:productId" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path='/payment-success/:orderId' element={<PaymentSuccess />} />
           <Route path="/account/*" element={<Account />} />
