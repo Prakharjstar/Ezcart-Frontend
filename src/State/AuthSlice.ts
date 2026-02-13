@@ -6,24 +6,31 @@ import { User } from "../types/userTypes";
     try {
         const response=await api.post("/auth/sent/login-signup-otp",{email , role:"ROLE_SELLER"} )
         console.log( "login otp " ,response)
+           return response.data;
         
     } catch (error) {
         console.log( "error --- " , error)
     }
 })
 
- export const Signin=createAsyncThunk<any,any>("/auth/signing" , async(loginRequest , {rejectWithValue})=>{
+ export const Signin = createAsyncThunk<any, any>(
+  "/auth/signing",
+  async (loginRequest, { rejectWithValue }) => {
     try {
-       
-        const response=await api.post("/auth/signing", loginRequest  );
-        console.log( "login otp "  ,response.data)
-        localStorage.setItem("jwt" , response.data.jwt)
-        return response.data.jwt;
-        
-    } catch (error) {
-        console.log( "error --- " , error)
+      const response = await api.post("/auth/signing", loginRequest);
+
+      const { jwt, role } = response.data;
+
+      
+      localStorage.setItem("jwt", jwt);
+      localStorage.setItem("role", role);
+
+      return { jwt, role };  
+    } catch (error:any) {
+      return rejectWithValue( error.response?.data?.message || "Login Failed");
     }
-})
+  }
+);
 
 
  export const Signup=createAsyncThunk<any,any>("/auth/signup" , async(signupRequest , {rejectWithValue})=>{
@@ -74,6 +81,7 @@ export const logoutThunk = createAsyncThunk<void, void>(
 
 interface AuthState{
     jwt: string| null,
+     role: string | null,
     otpSent:boolean,
     isLoggedIn:boolean,
     user:User | null,
@@ -84,6 +92,7 @@ const storedUser = localStorage.getItem("user");
 
 const initialState: AuthState = {
   jwt: localStorage.getItem("jwt"),
+  role: localStorage.getItem("role"), 
   otpSent: false,
   isLoggedIn: !!localStorage.getItem("jwt"),
   user: storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null,
@@ -96,10 +105,12 @@ const authSlice = createSlice({
     reducers:{
         logout:(state)=>{
              state.jwt = null;
+             state.role=null;
     state.isLoggedIn = false;
     state.user = null;
     localStorage.removeItem("jwt");
-    localStorage.removeItem("user")
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
 
         },
         
@@ -111,18 +122,25 @@ const authSlice = createSlice({
         })
          builder.addCase(sendLoginSignupOtp.fulfilled,(state)=>{
             state.loading=false;
-            state.otpSent=true;
+           state.otpSent=true;
         })
         builder.addCase(Signin.fulfilled,(state,action)=>{
-            state.jwt=action.payload
-            state.isLoggedIn=true
+              state.jwt = action.payload.jwt;
+              state.role = action.payload.role;
+              state.isLoggedIn = true;
         })
           builder.addCase(sendLoginSignupOtp.rejected,(state)=>{
             state.loading=false;
         })
+        builder.addCase(Signin.rejected, (state, action) => {
+  state.loading = false;
+  console.log("Login Failed:", action.payload);
+    });
 
         builder.addCase(Signup.fulfilled ,(state,action)=>{
-            state.jwt=action.payload
+             state.jwt = localStorage.getItem("jwt");
+        state.role = localStorage.getItem("role");
+        state.isLoggedIn = true;   
             state.isLoggedIn=true
         })
 

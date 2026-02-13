@@ -1,7 +1,18 @@
 import React from 'react'
 import { Product } from '../../types/ProductTypes'
+import { Close } from '@mui/icons-material'
+import { useAppDispatch } from '../../State/store'
+import { addProductToWishlist } from '../../State/customer/WishListSlice'
+import { teal } from '@mui/material/colors'
 
 const WishListProductCard = ({item}: {item:Product}) => {
+
+  const dispatch=useAppDispatch();
+
+  const handleWishList = ()=>{
+    item.id && dispatch(addProductToWishlist({productId:item.id}))
+    
+  }
   return (
     <div className='w-60 relative'>
         <div className='w-full'>
@@ -21,6 +32,13 @@ const WishListProductCard = ({item}: {item:Product}) => {
 
 
                 </div>
+
+        </div>
+
+        <div className='absolute top-1 right-1'>
+          <button onClick={handleWishList}>
+            <Close className='cursor-pointer bg-white rounded-full p-1' sx={{color:teal[500] , fontSize:"2rem"}} />
+          </button>
 
         </div>
 
