@@ -6,6 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useAppDispatch, useAppSelector } from '../../../State/store';
+import React from 'react';
+import { fetchSellerOrders } from '../../../State/seller/SellerOrderSlice';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,6 +52,13 @@ const rows = [
 ];
 
 export default function OrderTable() {
+  const  {sellerOrder} = useAppSelector(store => store)
+
+  const dispatch = useAppDispatch();
+
+  React.useEffect(()=>{
+    dispatch(fetchSellerOrders(localStorage.getItem("jwt") || ""))
+  },[])
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -62,15 +72,57 @@ export default function OrderTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+          {sellerOrder.orders.map((item) => (
+            <StyledTableRow key={item.id}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {item.id}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell >
+                <StyledTableCell>
+  <div className="flex flex-col gap-4">
+
+    {item.orderItems?.map((orderItem: any) => (
+      <div
+        key={orderItem.id}
+        className="border p-3 rounded-md flex flex-col gap-3"
+      >
+
+        {/* ✅ SHOW ALL IMAGES */}
+        <div className="flex gap-2 flex-wrap">
+          {orderItem.product?.images?.length > 0 ? (
+            orderItem.product.images.map((img: string, index: number) => (
+              <img
+                key={index}
+                src={img}
+                alt="product"
+                className="w-20 h-20 object-cover rounded-md border"
+              />
+            ))
+          ) : (
+            <div className="w-20 h-20 bg-gray-200 flex items-center justify-center">
+              No Image
+            </div>
+          )}
+        </div>
+
+        {/* ✅ PRODUCT DETAILS */}
+        <div>
+          <h1><b>Title:</b> {orderItem.product?.title}</h1>
+          <h1><b>Price:</b> ₹{orderItem.product?.sellingPrice}</h1>
+          <h1><b>Size:</b> {orderItem.size}</h1>
+          <h1><b>Qty:</b> {orderItem.quantity}</h1>
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+</StyledTableCell>
+                
+              </StyledTableCell>
+              {/* <StyledTableCell align="right">{item.fat}</StyledTableCell>
+              <StyledTableCell align="right">{item.carbs}</StyledTableCell>
+              <StyledTableCell align="right">{item.protein}</StyledTableCell> */}
             </StyledTableRow>
           ))}
         </TableBody>

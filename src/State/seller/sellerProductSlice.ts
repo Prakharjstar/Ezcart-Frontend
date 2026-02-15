@@ -7,7 +7,7 @@ export const fetchSellerProduct= createAsyncThunk<Product[],any>("/sellerProduct
     async(jwt : string ,{rejectWithValue})=>{
 
         try{
-            const response = await api.get(`/sellers/products`,{
+            const response = await api.get(`/seller/products`,{
                 headers:{
                     Authorization: `Bearer ${jwt}`,
 
@@ -33,7 +33,7 @@ export const createProduct = createAsyncThunk<Product,{request:any,jwt:string |n
     async(args , {rejectWithValue})=>{
         const {request , jwt} =args;
         try{
-            const response = await api.post(`/sellers/products`,request,{
+            const response = await api.post(`/seller/products`,request,{
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                 },
