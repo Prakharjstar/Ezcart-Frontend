@@ -8,7 +8,7 @@ import { create } from "domain";
 export const fetchSellerOrders = createAsyncThunk<Order[] , string>(
     'sellerOrders/fetchSellerOrders',async (jwt , {rejectWithValue})=>{
         try {
-            const response = await api.get('/seller/products' , {
+            const response = await api.get('/api/seller/orders' , {
                 headers : {Authorization : `Bearer ${jwt}`},
             });
 
@@ -25,11 +25,11 @@ export const fetchSellerOrders = createAsyncThunk<Order[] , string>(
 export const updateOrderStatus =  createAsyncThunk<Order , {
     jwt:string,
     orderId:number,
-    OrderStatus: OrderStatus
+    orderStatus: OrderStatus
 }>(
-    'sellerOrders/updateOrderStatus', async({jwt , orderId , OrderStatus}, {rejectWithValue})=>{
+    'sellerOrders/updateOrderStatus', async({jwt , orderId , orderStatus}, {rejectWithValue})=>{
         try{
-            const response = await api.patch(`seller/orders/${orderId}/status/${OrderStatus}`,null,{
+            const response = await api.patch(`/api/seller/orders/${orderId}/status/${orderStatus}`,null,{
                 headers: {Authorization:`Bearer ${jwt}`},
             });
 

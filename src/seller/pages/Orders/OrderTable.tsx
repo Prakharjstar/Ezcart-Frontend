@@ -8,7 +8,28 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useAppDispatch, useAppSelector } from '../../../State/store';
 import React from 'react';
-import { fetchSellerOrders } from '../../../State/seller/SellerOrderSlice';
+import { fetchSellerOrders, updateOrderStatus } from '../../../State/seller/SellerOrderSlice';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { OrderStatus } from '../../../types/orderTypes';
+
+
+// ✅ ORDER STATUS COLOR + LABEL CONFIG
+const ORDER_STATUS_CONFIG: any = {
+  PENDING: { color: '#FFA500', label: 'Pending' },
+  SHIPPED: { color: '#2196F3', label: 'Shipped' },
+  DELIVERED: { color: '#4CAF50', label: 'Delivered' },
+  CANCELLED: { color: '#F44336', label: 'Cancelled' },
+};
+
+
+// ✅ DROPDOWN OPTIONS
+const ORDER_STATUS_OPTIONS = [
+  { value: 'PENDING', label: 'Pending', color: '#FFA500' },
+  { value: 'SHIPPED', label: 'Shipped', color: '#2196F3' },
+  { value: 'DELIVERED', label: 'Delivered', color: '#4CAF50' },
+  { value: 'CANCELLED', label: 'Cancelled', color: '#F44336' },
+];
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -20,111 +41,154 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: '#f9fafb',
   },
   '&:hover': {
     backgroundColor: '#eef2ff',
-    cursor: 'pointer',
   },
   '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function OrderTable() {
-  const  {sellerOrder} = useAppSelector(store => store)
-
+  const { orders } = useAppSelector(state => state.sellerOrder);
   const dispatch = useAppDispatch();
 
-  React.useEffect(()=>{
-    dispatch(fetchSellerOrders(localStorage.getItem("jwt") || ""))
-  },[])
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = React.useState<number | null>(null);
+
+  const open = Boolean(anchorEl);
+
+  // ✅ OPEN MENU
+  const handleClick = (event: React.MouseEvent<HTMLElement>, orderId: number) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedOrderId(orderId);
+  };
+
+  // ✅ CLOSE MENU
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedOrderId(null);
+  };
+
+  // ✅ THIS WAS YOUR MAIN BUG — NOW FIXED
+  const handleStatusChange = (orderId: number, orderStatus: OrderStatus) => {
+    dispatch(
+      updateOrderStatus({
+        jwt: localStorage.getItem("jwt") || "",
+        orderId,
+        orderStatus,
+      })
+    );
+
+    handleClose(); // close dropdown after selecting
+  };
+
+  // ✅ FETCH ORDERS ON LOAD
+  React.useEffect(() => {
+    dispatch(fetchSellerOrders(localStorage.getItem("jwt") || ""));
+  }, [dispatch]);
+
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow>
-            <StyledTableCell >Order Id</StyledTableCell>
-            <StyledTableCell >Products</StyledTableCell>
-            <StyledTableCell align="right">ShippingAddress</StyledTableCell>
+            <StyledTableCell>Order Id</StyledTableCell>
+            <StyledTableCell>Products</StyledTableCell>
+            <StyledTableCell align="right">Shipping Address</StyledTableCell>
             <StyledTableCell align="right">Order Status</StyledTableCell>
-            <StyledTableCell align="right">update</StyledTableCell>
+            <StyledTableCell align="right">Update</StyledTableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {sellerOrder.orders.map((item) => (
-            <StyledTableRow key={item.id}>
-              <StyledTableCell component="th" scope="row">
-                {item.id}
-              </StyledTableCell>
-              <StyledTableCell >
+          {(orders || []).map((item: any) => {
+            const statusConfig = ORDER_STATUS_CONFIG[item.orderStatus] || {};
+
+            return (
+              <StyledTableRow key={item.id}>
+                <StyledTableCell>{item.id}</StyledTableCell>
+
+                {/* PRODUCTS */}
                 <StyledTableCell>
-  <div className="flex flex-col gap-4">
+                  <div className="flex gap-2 flex-wrap">
+                    {item.orderItems?.map((orderItem: any, index: number) => (
+                      <div key={index} className="flex gap-4 items-center border p-2 rounded-md">
+                        <img
+                          className="w-20 h-20 object-cover rounded-md"
+                          src={orderItem.product?.images?.[0]}
+                          alt="product"
+                        />
+                        <div>
+                          <h1>Title: {orderItem.product?.title}</h1>
+                          <h1>Price: ₹{orderItem.product?.sellingPrice}</h1>
+                          <h1>Color: {orderItem.product?.color}</h1>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </StyledTableCell>
 
-    {item.orderItems?.map((orderItem: any) => (
-      <div
-        key={orderItem.id}
-        className="border p-3 rounded-md flex flex-col gap-3"
-      >
+                {/* ADDRESS */}
+                <StyledTableCell align="right">
+                  <div className="flex flex-col gap-y-1">
+                    <h1>{item.shippingAddress?.name}</h1>
+                    <h1>{item.shippingAddress?.address}, {item.shippingAddress?.city}</h1>
+                    <h1>{item.shippingAddress?.state} - {item.shippingAddress?.pinCode}</h1>
+                    <h1><strong>Mobile:</strong> {item.shippingAddress?.mobile}</h1>
+                  </div>
+                </StyledTableCell>
 
-        {/* ✅ SHOW ALL IMAGES */}
-        <div className="flex gap-2 flex-wrap">
-          {orderItem.product?.images?.length > 0 ? (
-            orderItem.product.images.map((img: string, index: number) => (
-              <img
-                key={index}
-                src={img}
-                alt="product"
-                className="w-20 h-20 object-cover rounded-md border"
-              />
-            ))
-          ) : (
-            <div className="w-20 h-20 bg-gray-200 flex items-center justify-center">
-              No Image
-            </div>
-          )}
-        </div>
+                {/* STATUS BADGE */}
+                <StyledTableCell align="right">
+                  <span
+                    style={{
+                      padding: '6px 16px',
+                      borderRadius: '999px',
+                      border: `1px solid ${statusConfig.color}`,
+                      color: statusConfig.color,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {statusConfig.label}
+                  </span>
+                </StyledTableCell>
 
-        {/* ✅ PRODUCT DETAILS */}
-        <div>
-          <h1><b>Title:</b> {orderItem.product?.title}</h1>
-          <h1><b>Price:</b> ₹{orderItem.product?.sellingPrice}</h1>
-          <h1><b>Size:</b> {orderItem.size}</h1>
-          <h1><b>Qty:</b> {orderItem.quantity}</h1>
-        </div>
+                {/* UPDATE MENU */}
+                <StyledTableCell align="right">
+                  <Button variant="outlined" onClick={(e) => handleClick(e, item.id)}>
+                    STATUS
+                  </Button>
 
-      </div>
-    ))}
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={open && selectedOrderId === item.id}
+                    onClose={handleClose}
+                  >
+                    {ORDER_STATUS_OPTIONS.map((status) => (
+                      <MenuItem
+                        key={status.value}
+                        onClick={() =>
+                          handleStatusChange(item.id, status.value as OrderStatus)
+                        }
+                      >
+                        <span style={{ color: status.color }}>
+                          {status.label}
+                        </span>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </StyledTableCell>
 
-  </div>
-</StyledTableCell>
-                
-              </StyledTableCell>
-              {/* <StyledTableCell align="right">{item.fat}</StyledTableCell>
-              <StyledTableCell align="right">{item.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{item.protein}</StyledTableCell> */}
-            </StyledTableRow>
-          ))}
+              </StyledTableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
