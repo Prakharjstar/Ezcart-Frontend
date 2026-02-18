@@ -1,80 +1,61 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Button, ThemeProvider } from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { ThemeProvider } from '@mui/material';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './customer/components/Navbar/Navbar';
 import customTheme from './Theme/customeTheme';
 import Home from './customer/pages/Home/Home';
-import Deal from './customer/pages/Home/Deal/Deal';
 import Product from './customer/pages/Product/Product';
 import ProductDetails from './customer/pages/PageDetails/PoductDetails';
-import ReviewCard from './customer/pages/Review/ReviewCard';
 import Review from './customer/pages/Review/Review';
 import Cart from './customer/pages/Cart/Cart';
 import Checkout from './customer/pages/Checkout/Checkout';
 import Account from './customer/pages/Account/Account';
-import OrderDetails from './customer/pages/Account/OrderDetails';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import SellerDashboard from './seller/pages/SellerDashboard/SellerDashboard';
 import AdminDashboard from './admin/Pages/Dashboard/AdminDashboard';
-import { fetchProducts } from './State/FetchProduct';
 import Auth from './customer/pages/Auth/Auth';
+import PaymentSuccess from './customer/pages/PaymentSuccess';
+import WishList from './customer/WishList/WishList';
 import { useAppDispatch, useAppSelector } from './State/store';
 import { fetchSellerProfile } from './State/seller/sellerSlice';
 import { fetchUserProfile } from './State/AuthSlice';
-import PaymentSuccess from './customer/pages/PaymentSuccess';
-import WishList from './customer/WishList/WishList';
-
-
-
-
 
 function App() {
+  const dispatch = useAppDispatch();
+  const { auth } = useAppSelector(store => store);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const dispatch = useAppDispatch()
-  const {seller,auth}=useAppSelector(store=>store)
-  const navigate = useNavigate()
-
-  useEffect(()=>{
-    dispatch(fetchSellerProfile(localStorage.getItem("jwt") || ""))
-   
-  },[])
-
-  useEffect(() => {
   const jwt = auth.jwt || localStorage.getItem("jwt");
-  if (jwt) {
-   
-    dispatch(fetchUserProfile({ jwt }));
-  
-    if (auth.user?.role === "ROLE_SELLER") {
+
+  // 🔹 Fetch user and seller profile once on app load
+  useEffect(() => {
+    if (jwt) {
+      dispatch(fetchUserProfile({ jwt }));
       dispatch(fetchSellerProfile(jwt));
     }
-  }
-}, [auth.jwt]);
+  }, [jwt, dispatch]);
 
-useEffect(() => {
- 
-  if (auth.user?.role === "ROLE_SELLER") {
-    navigate("/seller");
-  } else if (auth.user?.role === "ROLE_CUSTOMER") {
-    navigate("/"); 
-  }
-}, [auth.user]);
+  // 🔹 Redirect after login, only if on login page
+  useEffect(() => {
+    if (!auth.user) return;
 
-  useEffect(()=>{
-    dispatch(fetchUserProfile({jwt: auth.jwt || localStorage.getItem("jwt")}))
+    if (location.pathname === "/login") {
+      if (auth.user.role === "ROLE_SELLER") {
+        navigate("/seller");
+      } else if (auth.user.role === "ROLE_CUSTOMER") {
+        navigate("/");
+      } else if (auth.user.role === "ROLE_ADMIN") {
+        navigate("/admin");
+      }
+    }
+  }, [auth.user, location.pathname, navigate]);
 
-  },[auth.jwt])
   return (
-
     <ThemeProvider theme={customTheme}>
       <div>
-      
-
-
-        {<Navbar />}
+        <Navbar />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -89,15 +70,10 @@ useEffect(() => {
           <Route path="/become-seller" element={<BecomeSeller />} />
           <Route path="/seller/*" element={<SellerDashboard />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/login" element={<Auth/>} />
-         
+          <Route path="/login" element={<Auth />} />
         </Routes>
-
       </div>
-
     </ThemeProvider>
-
-
   );
 }
 
