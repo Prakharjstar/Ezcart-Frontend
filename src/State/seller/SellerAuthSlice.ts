@@ -15,7 +15,7 @@ const initialState: SellerLoginState = {
   error: null,
 };
 
-// 🔹 Seller OTP login (via /auth/signing)
+
 export const SellerLogin = createAsyncThunk<any, { email: string; otp: string }>(
   "seller/login",
   async (loginData, { rejectWithValue }) => {

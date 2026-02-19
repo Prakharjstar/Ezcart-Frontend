@@ -29,15 +29,27 @@ function App() {
 
   const jwt = auth.jwt || localStorage.getItem("jwt");
 
-  // 🔹 Fetch user and seller profile once on app load
-  useEffect(() => {
-    if (jwt) {
-      dispatch(fetchUserProfile({ jwt }));
-      dispatch(fetchSellerProfile(jwt));
-    }
-  }, [jwt, dispatch]);
+  
+ useEffect(() => {
+  if (jwt) {
+    dispatch(fetchUserProfile({ jwt }));
+  }
+}, [jwt, dispatch]);
 
-  // 🔹 Redirect after login, only if on login page
+
+useEffect(() => {
+  if (!auth.user || !jwt) return;
+
+  const role = auth.user.role;
+
+  console.log("Logged in role:", role);
+
+  if (role === "ROLE_SELLER") {
+    dispatch(fetchSellerProfile(jwt));  
+  }
+
+}, [auth.user, jwt, dispatch]);
+
   useEffect(() => {
     if (!auth.user) return;
 
