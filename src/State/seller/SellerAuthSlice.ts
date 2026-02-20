@@ -1,6 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../config/api";
 
+/**
+ * 🔹 SAFE LOCAL STORAGE PARSER
+ * Prevents crash when value = "undefined"
+ */
+const getStoredUser = () => {
+  try {
+    const data = localStorage.getItem("user");
+
+    if (!data || data === "undefined" || data === "null") {
+      return null;
+    }
+
+    return JSON.parse(data);
+  } catch (e) {
+    console.warn("Invalid user in localStorage. Clearing...");
+    localStorage.removeItem("user");
+    return null;
+  }
+};
+
 interface SellerLoginState {
   loading: boolean;
   jwt: string | null;
@@ -11,25 +31,58 @@ interface SellerLoginState {
 const initialState: SellerLoginState = {
   loading: false,
   jwt: localStorage.getItem("jwt"),
-  user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
+  user: getStoredUser(),
   error: null,
 };
 
+//
+// 🔹 LOGIN (OTP)
+// Backend returns: { jwt, role }
+// NOT user anymore
+//
+export const SellerLogin = createAsyncThunk<
+  { jwt: string },
+  { email: string; otp: string }
+>("seller/login", async (loginData, { rejectWithValue }) => {
+  try {
+    const response = await api.post("/auth/signing", loginData);
+    const { jwt, role } = response.data;
 
-export const SellerLogin = createAsyncThunk<any, { email: string; otp: string }>(
-  "seller/login",
-  async (loginData, { rejectWithValue }) => {
+    // ✅ store only safe values
+    localStorage.setItem("jwt", jwt);
+    localStorage.setItem("role", role);
+
+    // ❌ NEVER store undefined user
+    localStorage.removeItem("user");
+
+    return { jwt };
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data || { message: "Login Failed" });
+  }
+});
+
+//
+// 🔹 FETCH SELLER PROFILE AFTER LOGIN
+// THIS is where we get actual seller data
+//
+export const fetchSellerProfile = createAsyncThunk<any>(
+  "seller/profile",
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await api.post("/auth/signing", loginData);  // same endpoint as customer
-      const { jwt, user, role } = response.data;
+      const jwt = localStorage.getItem("jwt");
 
-      localStorage.setItem("jwt", jwt);
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("role", role);
+      const response = await api.get("/api/sellers/profile", {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
 
-      return { jwt, user };
+      const seller = response.data;
+
+      // ✅ store VALID JSON ONLY
+      localStorage.setItem("user", JSON.stringify(seller));
+
+      return seller;
     } catch (err: any) {
-      return rejectWithValue(err.response?.data || { message: "Login Failed" });
+      return rejectWithValue("Failed to fetch seller profile");
     }
   }
 );
@@ -42,6 +95,7 @@ const sellerSlice = createSlice({
       state.jwt = null;
       state.user = null;
       state.error = null;
+
       localStorage.removeItem("jwt");
       localStorage.removeItem("user");
       localStorage.removeItem("role");
@@ -49,18 +103,23 @@ const sellerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      // LOGIN
       .addCase(SellerLogin.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(SellerLogin.fulfilled, (state, action) => {
         state.loading = false;
         state.jwt = action.payload.jwt;
-        state.user = action.payload.user;
       })
       .addCase(SellerLogin.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload?.message || "Login failed";
+      })
+
+      // PROFILE FETCH
+      .addCase(fetchSellerProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
   },
 });

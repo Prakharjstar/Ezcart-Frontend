@@ -23,7 +23,7 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch();
 
-    // ✅ Get logged-in role from Redux
+ 
     const { role } = useAppSelector((state) => state.auth);
 
     const handleLogout = () => {
@@ -31,7 +31,6 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
         navigate("/");
     }
 
-    // ✅ Filter Menu Based On Role
     // Hide "Account" for ADMIN
     const filteredMenu = menu.filter((item) => {
         if (role === "ROLE_ADMIN" && item.name === "Account") return false;
@@ -60,7 +59,7 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
                                 className='pr-9 cursor-pointer'
                                 key={index}
                             >
-                                <p className={`${item.path===location.pathname
+                                <div className={`${item.path===location.pathname
                                     ? "bg-primary-color text-white"
                                     : "text-primary-color"}
                                     flex items-center px-5 py-3 rounded-r-full`}>
@@ -72,7 +71,7 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
                                     </ListItemIcon>
 
                                     <ListItemText primary={item.name}/>
-                                </p>
+                                </div>
                             </div>
                         )
                     }
@@ -96,7 +95,7 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
                                 className='pr-9 cursor-pointer'
                                 key={index}
                             >
-                                <p className={`${item.path===location.pathname
+                                <div className={`${item.path===location.pathname
                                     ? "bg-primary-color text-white"
                                     : "text-primary-color"}
                                     flex items-center px-5 py-3 rounded-r-full`}>
@@ -108,7 +107,7 @@ const DrawerList = ({menu,menu2,toggleDrawer}:DrawerListProps) => {
                                     </ListItemIcon>
 
                                     <ListItemText primary={item.name}/>
-                                </p>
+                                </div>
                             </div>
                         )
                     }
