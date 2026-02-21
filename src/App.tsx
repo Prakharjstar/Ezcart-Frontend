@@ -20,6 +20,9 @@ import WishList from './customer/WishList/WishList';
 import { useAppDispatch, useAppSelector } from './State/store';
 import { fetchSellerProfile } from './State/seller/sellerSlice';
 import { fetchUserProfile } from './State/AuthSlice';
+import { createHomeCategories } from './State/customer/customerSlice';
+import { homeCategories } from './data/HomeCategories';
+
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,6 +38,10 @@ function App() {
     dispatch(fetchUserProfile({ jwt }));
   }
 }, [jwt, dispatch]);
+
+useEffect(() => {
+  dispatch(createHomeCategories(homeCategories));
+}, [dispatch]);
 
 
 useEffect(() => {

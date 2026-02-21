@@ -3,17 +3,17 @@ import { Deal } from "./dealTypes";
 
 export type HomeSection =
   | "GRID"
-  | "SHOP_BY_CATEGORY"
-  | "ELECTRIC_CATEGORY"
-  | "DEAL_CATEGORY";
+  | "SHOP_BY_CATEGORIES"
+  | "ELECTRIC_CATEGORIES"
+  | "DEALS";
 
 
 
 export interface HomeCategory {
   id?: number;
   categoryId: string;
-  section?: HomeSection;
-  name?: string;
+  section: HomeSection;
+  name: string;
   image: string;
   parentCategoryId?: string;
 }
