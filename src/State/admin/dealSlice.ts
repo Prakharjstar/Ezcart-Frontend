@@ -4,7 +4,7 @@ import { api } from "../../config/api";
 
 const API_URL = "/admin/deals";
 
-/* ================= CREATE DEAL ================= */
+
 export const createDeal = createAsyncThunk<Deal, Deal>(
   "deals/createDeal",
   async (deal, { rejectWithValue }) => {
@@ -19,7 +19,7 @@ export const createDeal = createAsyncThunk<Deal, Deal>(
   }
 );
 
-/* ================= UPDATE DEAL ================= */
+
 export const updateDeal = createAsyncThunk<
   Deal,
   { id: number; data: Deal }

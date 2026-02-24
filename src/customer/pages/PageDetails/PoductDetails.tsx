@@ -10,12 +10,36 @@ import ReviewCard from "../Review/ReviewCard";
 import { useAppDispatch, useAppSelector } from "../../../State/store";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
+import { addItemToCart, fetchUserCart } from "../../../State/customer/CartSlice";
 const ProductDetails = ()=>{
    const[quantity , setQuantity] = useState(1)
    const dispatch = useAppDispatch()
    const {productId}=useParams()
    const {product} = useAppSelector(store=>store)
    const [activeImage , setActiveImage] = useState(0)
+   const { user } = useAppSelector((store) => store.auth);
+  const { jwt } = useAppSelector((store) => store.auth); 
+
+   const handleAddToCart = () => {
+    if (!jwt) {
+        alert("Please login to add items to cart");
+        return;
+    }
+
+    dispatch(
+        addItemToCart({
+            jwt,
+            request: {
+                productId: product.product?.id,
+                size: product.product?.sizes[0] || "M", 
+                quantity,
+            },
+        })
+    ).then(() => {
+        dispatch(fetchUserCart(jwt));
+    });
+};
+     
 
    useEffect(()=>{
     dispatch(fetchProductById(Number(productId)))
@@ -123,7 +147,7 @@ const ProductDetails = ()=>{
 
                   <div className="mt-12 flex items-center gap-5">
 
-                    <Button  fullWidth variant="contained" startIcon={<AddShoppingCart/>} sx={{py:"1rem"}}>
+                    <Button onClick={handleAddToCart}   fullWidth variant="contained" startIcon={<AddShoppingCart/>} sx={{py:"1rem"}}>
                         Add To Bag
                     </Button>
                       <Button fullWidth variant="outlined" startIcon={<FavoriteBorder/>} sx={{py:"1rem"}}>

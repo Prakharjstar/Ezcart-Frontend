@@ -14,25 +14,25 @@ export const homeCategories :HomeCategory[]= [
     categoryId: "mobiles",
     section: "ELECTRIC_CATEGORIES",
     name: "Mobile",
-    image: "ADD_IMAGE_HERE"
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUquDFrgS0C3D8aemRxfmaeUpdgfi5bav7XLha8kj65A&s"
   },
   {
     categoryId: "smart_watches",
     section: "ELECTRIC_CATEGORIES",
     name: "Smartwatch",
-    image: "ADD_IMAGE_HERE"
+    image: "https://m.media-amazon.com/images/I/71Qo9+t9T3L._AC_UF1000,1000_QL80_.jpg"
   },
   {
     categoryId: "television",
     section: "ELECTRIC_CATEGORIES",
     name: "TV",
-    image: "ADD_IMAGE_HERE"
+    image: "https://kannankandy.com/wp-content/uploads/2025/06/TCL-55-UHD-SMART-GOOGLE-TV-494410492-i-1-1200Wx1200H-800x800.jpeg"
   },
   {
     categoryId: "cameras",
     section: "ELECTRIC_CATEGORIES",
     name: "Camera",
-    image: "ADD_IMAGE_HERE"
+    image: "https://my.canon/media/image/2023/02/06/d2a14a492cb94cbab491012c291fd6f5_EOS+R8+RF24-50mm+f4.5-6.3+IS+STM+Front+Slant.png"
   },
 
   // ================= GRID (FASHION HIGHLIGHT) =================
@@ -136,32 +136,38 @@ export const homeCategories :HomeCategory[]= [
     name: "Women Skirts",
     categoryId: "women_skirts_palazzos",
     section: "DEALS",
-    image: "ADD_IMAGE_HERE"
+    image: "ttps://thefebruarycompany.in/cdn/shop/files/jpeg-optimizer_6_9832e297-d61e-4315-b421-1f49b464d535.png?v=1756579837"
   },
   {
     name: "Men Formal Shirts",
     categoryId: "men_formal_shirts",
     section: "DEALS",
-    image: "ADD_IMAGE_HERE"
+    image: "https://assets.myntassets.com/dpr_1.5,q_30,w_400,c_limit,fl_progressive/assets/images/24505482/2023/8/15/64c33c99-2c8c-4474-a54b-f55cd3f18a331692108535803MISCHIEFMONKEYMenNavyBlueClassicOpaqueCasualShirt1.jpg"
   },
   {
     name: "Women Saree",
     categoryId: "women_sarees",
     section: "DEALS",
-    image: "ADD_IMAGE_HERE"
+    image: "https://diademstore.com/cdn/shop/collections/Saree_7699a67e-f424-4525-aa79-ce73e2d335ed_1200x1200.jpg?v=1741269128"
   },
   {
     name: "Smart Watches",
     categoryId: "smart_watches",
     section: "DEALS",
-    image: "ADD_IMAGE_HERE"
+    image: "https://static.vecteezy.com/system/resources/thumbnails/036/780/706/small/ai-generated-innovative-smart-watch-mockup-for-tech-marketing-ai-generated-photo.jpg"
   },
 
   {
     name : "Men Festive Wear",
     categoryId: "men_indian_and_festive_wear",
     section: "DEALS",
-    image: " i will add"
+    image: "https://img.faballey.com/images/Product/XMS27009Z/1.jpg"
+  },
+  {
+    name: "Mobile Phones",
+    categoryId: "mobiles",
+    section: "DEALS",
+    image: "https://cdn.beebom.com/mobile/apple-iphone-17-pro-front-back.png"
   },
 
 ];
