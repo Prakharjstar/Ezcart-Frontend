@@ -2,9 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../config/api";
 import { User } from "../types/userTypes";
 
-/* -------------------------------------------------------------------------- */
-/* 🛡️ SAFE LOCAL STORAGE HELPERS (VERY IMPORTANT)                              */
-/* -------------------------------------------------------------------------- */
 
 const getStoredUser = (): User | null => {
   try {
@@ -82,7 +79,7 @@ export const Signin = createAsyncThunk<
 /* -------------------------------------------------------------------------- */
 
 export const Signup = createAsyncThunk<
-  { jwt: string; user: User },
+  { message: string },
   { email: string; fullName: string; otp: string },
   { rejectValue: string }
 >(
@@ -90,20 +87,17 @@ export const Signup = createAsyncThunk<
   async (signupRequest, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/signup", signupRequest);
-      const { jwt, user } = response.data;
 
-      localStorage.setItem("jwt", jwt);
-      localStorage.setItem("role", user.role);
 
-      setStoredUser(user);
+      return { message: response.data.message };
 
-      return { jwt, user };
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Signup Failed");
+      return rejectWithValue(
+        error.response?.data?.message || "Signup Failed"
+      );
     }
   }
 );
-
 /* -------------------------------------------------------------------------- */
 /* 🔹 Fetch Profile                                                            */
 /* -------------------------------------------------------------------------- */
@@ -221,10 +215,8 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(Signup.fulfilled, (state, action) => {
-        state.jwt = action.payload.jwt;
-        state.role = action.payload.user.role;
-        state.user = action.payload.user;
-        state.isLoggedIn = true;
+        
+     
         state.otpSent = false;
         state.loading = false;
       })

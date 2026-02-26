@@ -14,10 +14,20 @@ const RegisterForm = () => {
       otp: "",
       fullName: "",
     },
-    onSubmit: (values) => {
-      // Send signup request with email + OTP + fullName
-      dispatch(Signup(values));
-    },
+   onSubmit: async (values) => {
+  const resultAction = await dispatch(Signup(values));
+
+  if (Signup.fulfilled.match(resultAction)) {
+    alert("Registration successful! Please login.");
+
+    formik.resetForm();
+
+    // Redirect to login page
+    window.location.href = "/login";
+  } else {
+    alert(resultAction.payload || "Signup failed");
+  }
+},
   });
 
   const handleSendOtp = () => {

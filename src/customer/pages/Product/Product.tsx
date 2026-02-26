@@ -46,10 +46,19 @@ const Product= ()=>{
       dispatch(fetchAllProducts(newFilter))
 
     },[category, searchParams, sort, page])
+
+    const formatCategory = (text?: string) => {
+  return text
+    ?.split("_")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
     return (
         <div className='-z-10 mt-10'>
             <div>
-                <h1 className="text-3xl text-center font-bold text-gray-700 pb-5 px-9 uppercase space-x-2">Women Sarees</h1>
+                <h1 className="text-3xl text-center font-bold text-gray-700 pb-5 px-9 uppercase">
+{formatCategory(category)}
+</h1>
             </div>
 
             <div className="lg:flex">

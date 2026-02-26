@@ -18,6 +18,7 @@ export enum UserRole{
 }
 
 export interface User{
+    sellerFetched: any;
     id?:number;
     password?:string;
     email:string;
