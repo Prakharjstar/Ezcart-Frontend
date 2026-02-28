@@ -1,73 +1,90 @@
 import { Add, Close, Remove } from "@mui/icons-material";
 import { Button, Divider, IconButton } from "@mui/material";
-import React from "react";
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import React, { useState, useEffect } from "react";
 import { CartItem } from "../../../types/cartTypes";
-import { useAppDispatch } from "../../../State/store";
-import { updateCartItem } from "../../../State/customer/CartSlice";
+import { useAppDispatch, useAppSelector } from "../../../State/store";
+import { updateCartItem, deleteCartItem } from "../../../State/customer/CartSlice";
 
-const CartItemCard = ({item}:{item:CartItem}) =>{
+const CartItemCard = ({ item }: { item: CartItem }) => {
+  const dispatch = useAppDispatch();
+  const jwt = localStorage.getItem("jwt");
 
-    
+  // local quantity for instant UI updates
+  const [quantity, setQuantity] = useState(item.quantity);
 
-    const dispatch = useAppDispatch()
+  // sync local quantity if Redux item changes (e.g., after fetching cart)
+  useEffect(() => {
+    setQuantity(item.quantity);
+  }, [item.quantity]);
 
-    const handleUpdateQuantity = (value:number)=>()=>{
-        dispatch(updateCartItem({jwt:localStorage.getItem("jwt"),cartItemId:item.id,cartItem:{quantity:item.quantity+value}}))
+  // handle + / - buttons
+  const handleUpdateQuantity = (value: number) => {
+    const newQuantity = quantity + value;
+    if (newQuantity < 1) return;
 
-    }
-    return (
-        <div className="border rounded-md relative"> 
-        <div className="p-5 flex gap-3">
+    setQuantity(newQuantity); // instant UI
+    if (!jwt) return;
 
-            <div>
-                <img className="w-[90px] rounded-md" src={item.product.images[0]} alt="" />
-            </div>
+    dispatch(
+      updateCartItem({
+        jwt,
+        cartItemId: item.id,
+        cartItem: { quantity: newQuantity },
+      })
+    );
+  };
 
-            <div className="space-y-2 ">
-                <h1 className="font-semibold text-lg">{item.product.seller?.businessDetails.businessName}</h1>
-                <p className="text-gray-600 font-medium text-sm">{item.product.title}</p>
-                <p className="text-gray-400 text-xs"><strong>Sold by : </strong> Natural Lifestyle Products PrivateLimited</p>
-                <p> 7 days replacement available</p>
-                <p className="text-sm text-gray-500"><strong>quantity : </strong> {item.quantity}</p>
-            </div>
-           
+  // handle remove
+  const handleRemoveItem = () => {
+    if (!jwt) return;
+    dispatch(deleteCartItem({ jwt, cartItemId: item.id }));
+  };
 
+  // total price for this item
+  const itemTotalPrice = item.sellingPrice * quantity;
+
+  return (
+    <div className="border rounded-md relative">
+      <div className="p-5 flex gap-3">
+        <div>
+          <img className="w-[90px] rounded-md" src={item.product.images[0]} alt="" />
         </div>
-         <Divider/>
-
-            <div className="flex justify-between items-center">
-                <div className="px-5 py-2 flex justify-between items-center">
-                <div className="flex items-center gap-2 w-[140px] justify-between">
-                    
-                     <Button onClick={handleUpdateQuantity(-1)} disabled={true}>
-                            <Remove/>
-                         </Button>
-
-                         <span> {item.quantity}</span>
-
-                         <Button onClick={handleUpdateQuantity(1)}>
-                            <Add />
-                         </Button>
- 
-
-                </div>
-
-            </div>
-
-            <div className="pr-5">
-                <p className="text-gray-700 font-medium">₹{item.sellingPrice}</p>
-            </div>
-            </div>
-
-            <div className="absolute top-1 right-1">
-                <IconButton color="primary">
-                    <Close/>
-                </IconButton>
-            </div>
-        
+        <div className="space-y-2">
+          <h1 className="font-semibold text-lg">
+            {item.product.seller?.businessDetails.businessName}
+          </h1>
+          <p className="text-gray-600 font-medium text-sm">{item.product.title}</p>
+          <p className="text-gray-500 text-sm">
+            <strong>quantity : </strong>{quantity}
+          </p>
         </div>
-    )
-}
+      </div>
 
-export default CartItemCard
+      <Divider />
+
+      <div className="flex justify-between items-center px-5 py-2">
+        <div className="flex items-center gap-2 w-[140px] justify-between">
+          <Button onClick={() => handleUpdateQuantity(-1)} disabled={quantity <= 1}>
+            <Remove />
+          </Button>
+          <span>{quantity}</span>
+          <Button onClick={() => handleUpdateQuantity(1)}>
+            <Add />
+          </Button>
+        </div>
+
+        <div>
+          <p className="text-gray-700 font-medium">₹{itemTotalPrice}</p>
+        </div>
+      </div>
+
+      <div className="absolute top-1 right-1">
+        <IconButton color="primary" onClick={handleRemoveItem}>
+          <Close />
+        </IconButton>
+      </div>
+    </div>
+  );
+};
+
+export default CartItemCard;
