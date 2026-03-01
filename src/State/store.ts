@@ -11,6 +11,7 @@ import sellerOrderSlice from "./seller/SellerOrderSlice";
 import transactionSlice from "./seller/transactionSlice";
 import adminSlice from "./admin/adminSlice"
 import customerSlice from "./customer/customerSlice"
+import couponReducer from "./customer/CouponSlice";
 
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
  order: orderSlice,
  wishlist:WishListSlice,
  customer: customerSlice,
+ coupon:couponReducer,
 
 //seller
 

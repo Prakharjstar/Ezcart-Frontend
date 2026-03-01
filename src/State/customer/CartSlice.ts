@@ -1,10 +1,24 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Cart, CartItem } from "../../types/cartTypes";
-
-import { sumCartItemMrpPrice, sumCartItemSellingPrice } from "../../Util/sumCartItemMrpPrice";
-import { applyCoupon } from "./CouponSlice";
 import { api } from "../../config/api";
 
+// Utility functions to calculate totals including discounts
+const calculateCartTotals = (cartItems: CartItem[]) => {
+  const totalMrpPrice = cartItems.reduce(
+    (sum, item) => sum + item.mrpPrice * item.quantity,
+    0
+  );
+
+  const totalSellingPrice = cartItems.reduce(
+    (sum, item) => sum + item.sellingPrice * item.quantity,
+    0
+  );
+
+  const discountAmount = totalMrpPrice - totalSellingPrice;
+  const finalPrice = totalSellingPrice;
+
+  return { totalMrpPrice, totalSellingPrice, discountAmount, finalPrice };
+};
 
 interface CartState {
   cart: Cart | null;
@@ -20,16 +34,17 @@ const initialState: CartState = {
     totalSellingPrice: 0,
     totalItem: 0,
     totalMrpPrice: 0,
-    discount: 0,
+    discountAmount: 0,
+    finalPrice: 0,
     couponCode: null,
   },
   loading: false,
   error: null,
 };
 
+const API_URL = "/api/cart";
 
-const API_URL="/api/cart";
-
+// Fetch user cart
 export const fetchUserCart = createAsyncThunk<Cart, string>(
   "cart/fetchUserCart",
   async (jwt: string, { rejectWithValue }) => {
@@ -37,22 +52,19 @@ export const fetchUserCart = createAsyncThunk<Cart, string>(
       const response = await api.get(API_URL, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
-      console.log("Cart fetched ", response.data);
       return response.data;
     } catch (error: any) {
-      console.log("error ", error.response);
       return rejectWithValue("Failed to fetch user cart");
     }
   }
 );
 
-
+// Add item
 interface AddItemRequest {
   productId: number | undefined;
   size: string;
   quantity: number;
 }
-
 export const addItemToCart = createAsyncThunk<
   CartItem,
   { jwt: string | null; request: AddItemRequest }
@@ -61,15 +73,13 @@ export const addItemToCart = createAsyncThunk<
     const response = await api.put(`${API_URL}/add`, request, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
-    console.log("Cart added ", response.data);
     return response.data;
   } catch (error: any) {
-    console.log("error ", error.response);
     return rejectWithValue("Failed to add item to cart");
   }
 });
 
-
+// Delete item
 export const deleteCartItem = createAsyncThunk<
   any,
   { jwt: string; cartItemId: number }
@@ -80,9 +90,7 @@ export const deleteCartItem = createAsyncThunk<
     });
     return response.data;
   } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to delete cart item"
-    );
+    return rejectWithValue("Failed to delete cart item");
   }
 });
 
@@ -94,15 +102,14 @@ export const updateCartItem = createAsyncThunk<
   "cart/updateCartItem",
   async ({ jwt, cartItemId, cartItem }, { rejectWithValue }) => {
     try {
-      const response = await api.put(`${API_URL}/item/${cartItemId}`, cartItem, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
-      console.log("Cart item updated successfully " , response.data)
+      const response = await api.put(
+        `${API_URL}/item/${cartItemId}`,
+        cartItem,
+        { headers: { Authorization: `Bearer ${jwt}` } }
+      );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to update cart item"
-      );
+      return rejectWithValue("Failed to update cart item");
     }
   }
 );
@@ -119,12 +126,18 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-     
       .addCase(fetchUserCart.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchUserCart.fulfilled, (state, action: PayloadAction<Cart>) => {
+        if (action.payload.cartItems) {
+          const totals = calculateCartTotals(action.payload.cartItems);
+          action.payload.totalMrpPrice = totals.totalMrpPrice;
+          action.payload.totalSellingPrice = totals.totalSellingPrice;
+          action.payload.discountAmount = totals.discountAmount;
+          action.payload.finalPrice = totals.finalPrice;
+        }
         state.cart = action.payload;
         state.loading = false;
       })
@@ -133,40 +146,27 @@ const cartSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      .addCase(addItemToCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(addItemToCart.fulfilled, (state, action: PayloadAction<CartItem>) => {
         if (state.cart) {
-      
           const index = state.cart.cartItems.findIndex(
             (item) =>
               item.product.id === action.payload.product.id &&
               item.size === action.payload.size
           );
-
           if (index !== -1) {
-           
-            state.cart.cartItems[index] = {
-              ...state.cart.cartItems[index],
-              ...action.payload,
-            };
+            state.cart.cartItems[index] = { ...state.cart.cartItems[index], ...action.payload };
           } else {
-          
             state.cart.cartItems.push(action.payload);
           }
 
-          
-          state.cart.totalMrpPrice = sumCartItemMrpPrice(state.cart.cartItems);
-          state.cart.totalSellingPrice = sumCartItemSellingPrice(state.cart.cartItems);
+          const totals = calculateCartTotals(state.cart.cartItems);
+          state.cart.totalMrpPrice = totals.totalMrpPrice;
+          state.cart.totalSellingPrice = totals.totalSellingPrice;
+          state.cart.discountAmount = totals.discountAmount;
+          state.cart.finalPrice = totals.finalPrice;
           state.cart.totalItem = state.cart.cartItems.reduce((sum, i) => sum + i.quantity, 0);
         }
         state.loading = false;
-      })
-      .addCase(addItemToCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
       })
 
       .addCase(deleteCartItem.fulfilled, (state, action) => {
@@ -174,23 +174,14 @@ const cartSlice = createSlice({
           state.cart.cartItems = state.cart.cartItems.filter(
             (item: CartItem) => item.id !== action.meta.arg.cartItemId
           );
-
-          state.cart.totalMrpPrice = sumCartItemMrpPrice(state.cart.cartItems);
-          state.cart.totalSellingPrice = sumCartItemSellingPrice(state.cart.cartItems);
+          const totals = calculateCartTotals(state.cart.cartItems);
+          state.cart.totalMrpPrice = totals.totalMrpPrice;
+          state.cart.totalSellingPrice = totals.totalSellingPrice;
+          state.cart.discountAmount = totals.discountAmount;
+          state.cart.finalPrice = totals.finalPrice;
           state.cart.totalItem = state.cart.cartItems.reduce((sum, i) => sum + i.quantity, 0);
         }
         state.loading = false;
-      })
-
-      .addCase(updateCartItem.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-     
-      .addCase(applyCoupon.fulfilled, (state, action) => {
-        state.loading = false;
-        state.cart = action.payload;
       });
   },
 });

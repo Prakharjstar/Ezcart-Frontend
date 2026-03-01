@@ -22,7 +22,7 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
     const newQuantity = quantity + value;
     if (newQuantity < 1) return;
 
-    setQuantity(newQuantity); // instant UI
+    setQuantity(newQuantity); 
     if (!jwt) return;
 
     dispatch(
