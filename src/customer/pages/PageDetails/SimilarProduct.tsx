@@ -1,11 +1,14 @@
-import SimilarProductCard from "./SimilarProductCard";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const SimilarProduct = () => {
   return (
-    <div className="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 gap-y-8">
-      {[1,1,1,1,1,1,1,1].map((item, index) => (
-        <SimilarProductCard key={index} />
-      ))}
+    <div className="flex justify-center">
+      <Link to="/">
+        <Button variant="contained" className="bg-primary-color text-white font-medium py-2 px-4 rounded">
+         Back
+        </Button>
+      </Link>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { AddShoppingCart, FavoriteBorder, Remove, Shield, Wallet, WorkspacePremium, LocalShipping } from "@mui/icons-material";
 import SimilarProduct from "./SimilarProduct";
 import ReviewCard from "../Review/ReviewCard";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../State/store";
 import { useParams } from "react-router-dom";
 import { fetchProductById } from "../../../State/customer/ProductSlice";
@@ -23,6 +24,9 @@ const ProductDetails = () => {
   const { jwt } = useAppSelector(store => store.auth);
 
   const { productId } = useParams();
+  const navigate = useNavigate();
+
+  const [localReviews, setLocalReviews] = useState<any[]>([]);
 
   // Fetch product details
   useEffect(() => {
@@ -77,6 +81,13 @@ const ProductDetails = () => {
     setActiveImage(index);
   };
 
+  useEffect(() => {
+    if (!productId) return;
+    const key = `reviews_${productId}`;
+    const arr = JSON.parse(localStorage.getItem(key) || "[]");
+    setLocalReviews(arr || []);
+  }, [productId]);
+
   return (
     <div className="px-5 lg:px-20 pt-10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -128,7 +139,7 @@ const ProductDetails = () => {
               {product?.mrpPrice}
             </span>
             <span className="text-green-500 font-semibold">
-              {product?.discountPercent}
+              {product?.discountPercent && `${product.discountPercent}%`}
             </span>
           </div>
           <p className="text-sm mt-2">
@@ -203,15 +214,50 @@ const ProductDetails = () => {
 
           {/* Reviews */}
           <div className="mt-12 space-y-5">
-            <ReviewCard />
-            <Divider />
+            <div className="flex justify-end">
+              <Button onClick={() => navigate(`/reviews/${productId}/create`)} variant="outlined">
+                Write Review
+              </Button>
+            </div>
+
+            {localReviews.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-600">No reviews yet. Be the first to review this product.</p>
+              </div>
+            ) : (
+              localReviews.map((r) => (
+                <div key={r.id}>
+                  <ReviewCard
+                    review={r}
+                    onDelete={(id) => {
+                      if (id == null) return;
+                      // remove review with this id from any reviews_* key
+                      Object.keys(localStorage).forEach((k) => {
+                        if (!k.startsWith("reviews_")) return;
+                        try {
+                          const arr = JSON.parse(localStorage.getItem(k) || "[]");
+                          const updated = (arr || []).filter((x: any) => String(x.id) !== String(id));
+                          localStorage.setItem(k, JSON.stringify(updated || []));
+                        } catch (e) {}
+                      });
+
+                      // refresh current list
+                      const key = `reviews_${productId}`;
+                      const newList = JSON.parse(localStorage.getItem(key) || "[]");
+                      setLocalReviews(newList || []);
+                    }}
+                  />
+                  <Divider />
+                </div>
+              ))
+            )}
           </div>
         </section>
       </div>
 
       {/* Similar Products */}
       <div className="mt-20">
-        <h1 className="text-lg font-bold text-center">Similar Product</h1>
+        <h1 className="text-lg text-2xl font-bold text-center">Don't forget to add review For the product, Happy Shopping</h1>
         <div className="pt-5">
           <SimilarProduct />
         </div>

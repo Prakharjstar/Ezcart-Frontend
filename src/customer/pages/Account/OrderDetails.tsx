@@ -32,8 +32,7 @@ const OrderDetails = () => {
 
         </div>
         <div>
-
-            <Button onClick = {() => navigate(`/reviews/${5}/create`)}> Write Review </Button>
+            <Button onClick = {() => navigate(`/reviews/${order.orderItem?.product?.id}/create`)} disabled={!order.orderItem?.product?.id}> Write Review </Button>
         </div>
     </section>  
 

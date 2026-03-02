@@ -41,31 +41,31 @@ export const homeCategories :HomeCategory[]= [
     categoryId: "women_lehenga_cholis",
     section: "GRID",
     name: "Women Lehenga Cholis",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80"
   },
   {
     categoryId: "men_formal_shoes",
     section: "GRID",
     name: "Men Formal Shoes",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1595950653128-46bb078c9f46?auto=format&fit=crop&w=800&q=80"
   },
   {
     categoryId: "men_sherwanis",
     section: "GRID",
     name: "Men Sherwanis",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1520974735196-48ad189d6553?auto=format&fit=crop&w=800&q=80"
   },
   {
     categoryId: "women_jewellery",
     section: "GRID",
     name: "Women Jewellery",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1564538074104-8f594603dca1?auto=format&fit=crop&w=800&q=80"
   },
   {
     categoryId: "women_footwear",
     section: "GRID",
     name: "Women Footwear",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1515562141247-45095ddda306?auto=format&fit=crop&w=800&q=80"
   },
 
   // ================= SHOP BY CATEGORIES =================
@@ -80,21 +80,21 @@ export const homeCategories :HomeCategory[]= [
     name: "Kitchen & Table",
     categoryId: "kitchen_table",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1540508614847-096a7d3e8b42?auto=format&fit=crop&w=800&q=80"
   },
   {
     parentCategoryId: "women",
     name: "Sports & Active Wear",
     categoryId: "women_sports_active_wear",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1526404421358-474cd2e5e2c5?auto=format&fit=crop&w=800&q=80"
   },
   {
     parentCategoryId: "women",
     name: "Lingerie & Sleepwear",
     categoryId: "women_lingerie_sleepwear",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e6e?auto=format&fit=crop&w=800&q=80"
   },
 
 
@@ -108,25 +108,25 @@ export const homeCategories :HomeCategory[]= [
     name: "Kitchen & Dining",
     categoryId: "kitchen_dining",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbuxOfw1dwgbWeav4KqMYF9ZimA0YfPIML8g&s"
   },
   {
     name: "Beauty & Care",
     categoryId: "beauty",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=800&q=80"
   },
   {
     name: "Sports & Fitness",
     categoryId: "sports",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80"
   },
   {
     name: "Bags & Accessories",
     categoryId: "bags",
     section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
+    image: "https://images.unsplash.com/photo-1526178615851-9f207f3e0a8f?auto=format&fit=crop&w=800&q=80"
   },
 
 
