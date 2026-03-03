@@ -87,23 +87,17 @@ export const homeCategories :HomeCategory[]= [
     name: "Sports & Active Wear",
     categoryId: "women_sports_active_wear",
     section: "SHOP_BY_CATEGORIES",
-    image: "https://images.unsplash.com/photo-1526404421358-474cd2e5e2c5?auto=format&fit=crop&w=800&q=80"
+    image: "https://media.istockphoto.com/id/466367844/photo/clothes-make-running.jpg?s=612x612&w=0&k=20&c=eGOSP7X2MoXpGKhv8a3UlYHplvKvIIdUPmVKBSd3bMI="
   },
   {
     parentCategoryId: "women",
     name: "Lingerie & Sleepwear",
     categoryId: "women_lingerie_sleepwear",
     section: "SHOP_BY_CATEGORIES",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e6e?auto=format&fit=crop&w=800&q=80"
+    image: "https://s.alicdn.com/@sc04/kf/Hb51bb6fc2ee645c6b357af59899d6fbd7/With-Cheap-Price-Loose-Satin-Sexy-Sleepwear-Sexy-Mature-Woman-Lingerie-Photos-Silk-Nightdress-Pyjama-Sexy-Pour-Femme.jpg"
   },
 
 
-    {
-    name: "Home Décor",
-    categoryId: "home_decor",
-    section: "SHOP_BY_CATEGORIES",
-    image: "ADD_IMAGE_HERE"
-  },
   {
     name: "Kitchen & Dining",
     categoryId: "kitchen_dining",
@@ -114,19 +108,67 @@ export const homeCategories :HomeCategory[]= [
     name: "Beauty & Care",
     categoryId: "beauty",
     section: "SHOP_BY_CATEGORIES",
-    image: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=800&q=80"
+    image: "https://5.imimg.com/data5/SELLER/Default/2022/8/XN/NF/SB/157564005/beauty-personal-care.jpg"
   },
   {
     name: "Sports & Fitness",
     categoryId: "sports",
     section: "SHOP_BY_CATEGORIES",
-    image: "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=800&q=80"
+    image: "https://img.freepik.com/free-photo/strong-man-training-gym_1303-23478.jpg?semt=ais_hybrid&w=740&q=80"
   },
   {
     name: "Bags & Accessories",
     categoryId: "bags",
     section: "SHOP_BY_CATEGORIES",
     image: "https://images.unsplash.com/photo-1526178615851-9f207f3e0a8f?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Women Saree",
+    categoryId: "women_sarees",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://diademstore.com/cdn/shop/collections/Saree_7699a67e-f424-4525-aa79-ce73e2d335ed_1200x1200.jpg?v=1741269128"
+  },
+  {
+    name: "Men Shirts",
+    categoryId: "men_shirts",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://assets.myntassets.com/dpr_1.5,q_30,w_400,c_limit,fl_progressive/assets/images/24505482/2023/8/15/64c33c99-2c8c-4474-a54b-f55cd3f18a331692108535803MISCHIEFMONKEYMenNavyBlueClassicOpaqueCasualShirt1.jpg"
+  },
+  {
+    name: "Laptops",
+    categoryId: "laptops",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://rukminim2.flixcart.com/image/312/312/xif0q/computer/x/9/j/-original-imahyjzh7m2zsqdg.jpeg?q=70"
+  },
+  {
+    name: "Mobile Accessories",
+    categoryId: "mobile_accessories",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://images.unsplash.com/photo-1584801297693-07c96d5d0a4f?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Smart Wearable Tech",
+    categoryId: "smart_wearable_tech",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Tablets",
+    categoryId: "tablets",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://images.unsplash.com/photo-1581276879432-15a7432b7a50?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Flooring",
+    categoryId: "flooring",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001ca21?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    name: "Lamps",
+    categoryId: "lamps",
+    section: "SHOP_BY_CATEGORIES",
+    image: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80"
   },
 
 
