@@ -1,14 +1,28 @@
 import { CalendarViewDay, ElectricBolt, Inventory2, Schedule } from '@mui/icons-material'
-import { Avatar } from '@mui/material'
+import { Avatar, Button } from '@mui/material'
 import { teal } from '@mui/material/colors'
 import React from 'react'
 import { Order, OrderItem } from '../../../types/orderTypes'
 import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '../../../State/store'
+import { cancelOrder, fetchUserOrderHistory } from '../../../State/customer/orderSlice'
 
 function OrderItemCard({item ,order}:{item:OrderItem , order:Order}) {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handleCancelOrder = async () => {
+        try {
+            await dispatch(cancelOrder(order.id));
+            // Refetch orders to update the list
+            dispatch(fetchUserOrderHistory(localStorage.getItem("jwt") || ""));
+        } catch (error) {
+            console.error("Error cancelling order:", error);
+        }
+    };
+
   return (
-    <div onClick={()=> navigate(`/account/order/${order.id}/${item.id}`)} className='text-sm bg-white p-5 space-y-4 border rounded-md cursor-pointer'>
+    <div className='text-sm bg-white p-5 space-y-4 border rounded-md cursor-pointer'>
 
         <div className='flex items-center gap-5'>
 
@@ -26,7 +40,7 @@ function OrderItemCard({item ,order}:{item:OrderItem , order:Order}) {
 
         <div className='p-5 bg-teal-50 flex gap-3'>
 
-            <div><img className='w-[70px]' src= {item.product.images[0]} alt="" />
+            <div><img className='w-[70px]' src= {item.product.images?.[0]} alt="" />
             </div>
 
             <div className='w-full space-y-2'>
@@ -35,6 +49,19 @@ function OrderItemCard({item ,order}:{item:OrderItem , order:Order}) {
                 <p><strong>size :</strong>FREE</p>
             </div>
             
+            <div className='flex flex-col justify-center'>
+                <Button 
+                    variant="outlined" 
+                    color="error" 
+                    size="small"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent navigation when clicking cancel
+                        handleCancelOrder();
+                    }}
+                >
+                    Cancel Order
+                </Button>
+            </div>
             
         </div>
       

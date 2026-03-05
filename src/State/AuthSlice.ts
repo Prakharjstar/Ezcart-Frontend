@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../config/api";
 import { User } from "../types/userTypes";
 
-
 const getStoredUser = (): User | null => {
   try {
     const stored = localStorage.getItem("user");
@@ -30,12 +29,7 @@ const setStoredUser = (user?: User) => {
 /* -------------------------------------------------------------------------- */
 /* 🔹 Send OTP                                                                 */
 /* -------------------------------------------------------------------------- */
-
-export const sendLoginSignupOtp = createAsyncThunk<
-  any,
-  { email: string },
-  { rejectValue: string }
->(
+export const sendLoginSignupOtp = createAsyncThunk<any, { email: string }, { rejectValue: string }>(
   "auth/sendLoginSignupOtp",
   async ({ email }, { rejectWithValue }) => {
     try {
@@ -50,7 +44,6 @@ export const sendLoginSignupOtp = createAsyncThunk<
 /* -------------------------------------------------------------------------- */
 /* 🔹 Signin                                                                   */
 /* -------------------------------------------------------------------------- */
-
 export const Signin = createAsyncThunk<
   { jwt: string; role: string; user?: User },
   { email: string; otp?: string; password?: string },
@@ -64,7 +57,6 @@ export const Signin = createAsyncThunk<
 
       localStorage.setItem("jwt", jwt);
       localStorage.setItem("role", role);
-
       setStoredUser(user);
 
       return { jwt, role, user };
@@ -77,7 +69,6 @@ export const Signin = createAsyncThunk<
 /* -------------------------------------------------------------------------- */
 /* 🔹 Signup                                                                   */
 /* -------------------------------------------------------------------------- */
-
 export const Signup = createAsyncThunk<
   { message: string },
   { email: string; fullName: string; otp: string },
@@ -87,26 +78,17 @@ export const Signup = createAsyncThunk<
   async (signupRequest, { rejectWithValue }) => {
     try {
       const response = await api.post("/auth/signup", signupRequest);
-
-
       return { message: response.data.message };
-
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Signup Failed"
-      );
+      return rejectWithValue(error.response?.data?.message || "Signup Failed");
     }
   }
 );
+
 /* -------------------------------------------------------------------------- */
 /* 🔹 Fetch Profile                                                            */
 /* -------------------------------------------------------------------------- */
-
-export const fetchUserProfile = createAsyncThunk<
-  User,
-  { jwt: string },
-  { rejectValue: string }
->(
+export const fetchUserProfile = createAsyncThunk<User, { jwt: string }, { rejectValue: string }>(
   "auth/fetchUserProfile",
   async ({ jwt }, { rejectWithValue }) => {
     try {
@@ -115,7 +97,6 @@ export const fetchUserProfile = createAsyncThunk<
       });
 
       setStoredUser(response.data);
-
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || "Failed to fetch profile");
@@ -126,22 +107,50 @@ export const fetchUserProfile = createAsyncThunk<
 /* -------------------------------------------------------------------------- */
 /* 🔹 Logout                                                                   */
 /* -------------------------------------------------------------------------- */
-
 export const logoutThunk = createAsyncThunk<void, void>(
   "auth/logout",
   async (_, { dispatch }) => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
-
     dispatch(authSlice.actions.logout());
   }
 );
 
 /* -------------------------------------------------------------------------- */
+/* 🔹 Signin with Google                                                       */
+/* -------------------------------------------------------------------------- */
+export const SigninWithGoogle = createAsyncThunk<
+  { jwt: string; role: string; user?: User },
+  { accessToken: string },
+  { rejectValue: string }
+>(
+  "auth/signinWithGoogle",
+  async ({ accessToken }, { rejectWithValue, dispatch }) => {
+    try {
+      // Step 1: Call backend Google login
+      const response = await api.post("/auth/google", { accessToken });
+      const { jwt } = response.data;
+
+      // Store JWT
+      localStorage.setItem("jwt", jwt);
+
+      // Step 2: Fetch user profile
+      const profileResponse = await dispatch(fetchUserProfile({ jwt })).unwrap();
+
+      return {
+        jwt,
+        role: profileResponse.role || "USER", // default role
+        user: profileResponse,
+      };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Google login failed");
+    }
+  }
+);
+/* -------------------------------------------------------------------------- */
 /* 🔹 STATE                                                                    */
 /* -------------------------------------------------------------------------- */
-
 interface AuthState {
   jwt: string | null;
   role: string | null;
@@ -156,14 +165,13 @@ const initialState: AuthState = {
   role: localStorage.getItem("role"),
   otpSent: false,
   isLoggedIn: !!localStorage.getItem("jwt"),
-  user: getStoredUser(), // ✅ SAFE HYDRATION
+  user: getStoredUser(),
   loading: false,
 };
 
 /* -------------------------------------------------------------------------- */
 /* 🔹 SLICE                                                                    */
 /* -------------------------------------------------------------------------- */
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -174,7 +182,6 @@ const authSlice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
       state.otpSent = false;
-
       localStorage.removeItem("jwt");
       localStorage.removeItem("role");
       localStorage.removeItem("user");
@@ -214,9 +221,7 @@ const authSlice = createSlice({
       .addCase(Signup.pending, (state) => {
         state.loading = true;
       })
-      .addCase(Signup.fulfilled, (state, action) => {
-        
-     
+      .addCase(Signup.fulfilled, (state) => {
         state.otpSent = false;
         state.loading = false;
       })
@@ -228,6 +233,22 @@ const authSlice = createSlice({
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoggedIn = true;
+      })
+
+      // Google Signin
+      .addCase(SigninWithGoogle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(SigninWithGoogle.fulfilled, (state, action) => {
+        state.jwt = action.payload.jwt;
+        state.role = action.payload.role;
+        state.user = action.payload.user || null;
+        state.isLoggedIn = true;
+        state.otpSent = false;
+        state.loading = false;
+      })
+      .addCase(SigninWithGoogle.rejected, (state) => {
+        state.loading = false;
       });
   },
 });

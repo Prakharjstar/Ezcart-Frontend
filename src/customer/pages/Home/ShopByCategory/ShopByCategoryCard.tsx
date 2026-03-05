@@ -2,10 +2,10 @@ import React from "react";
 import "./ShopByCategory.css"
 import { HomeCategory } from "../../../../types/HomeCategoryTypes";
 
-const ShopByCategoryCard = ({item}:{item:HomeCategory})=>{
+const ShopByCategoryCard = ({item, onClick}:{item:HomeCategory, onClick: () => void})=>{
 
     return(
-        <div className= 'flex gap-3 flex-col justify-center items-center  group cursor-pointer'>
+        <div className= 'flex gap-3 flex-col justify-center items-center  group cursor-pointer' onClick={onClick}>
 
             <div className='custome-border w-[150px] h-[150px] lg:w-[249px] lg:h-[249px] rounded-full'>
                 <img

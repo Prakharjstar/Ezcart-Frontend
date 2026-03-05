@@ -55,19 +55,19 @@ const rows = [
 ];
 
 export default function ProductTable() {
-  const dispatch =useAppDispatch();
-  const {sellerProduct} = useAppSelector(store=>store)
+  const dispatch = useAppDispatch();
+  const { sellerProduct } = useAppSelector(store => store)
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch(fetchSellerProduct(localStorage.getItem('jwt')))
-  } ,[])
+  }, [])
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell >Images</StyledTableCell>
-            
+
             <StyledTableCell align="right">Title</StyledTableCell>
             <StyledTableCell align="right">MRP</StyledTableCell>
             <StyledTableCell align="right">Selling Price</StyledTableCell>
@@ -78,23 +78,31 @@ export default function ProductTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sellerProduct.products.map((item:Product) => (
+          {sellerProduct?.products?.map((item: Product) => (
             <StyledTableRow key={item.id}>
               <StyledTableCell component="th" scope="row">
-               <div className='flex gap-1 flex-wrap'>
-                 {item.images.map((image)=><img className='w-20 rounded-md' alt="" src={image}/>)}
-               </div>
+                <div className='flex gap-1 flex-wrap'>
+                  {item?.images?.map((image, index) => (
+                    <img
+                      key={index}
+                      className="w-20 rounded-md"
+                      alt="product"
+                      src={image}
+                    />
+                  ))}
+
+                </div>
               </StyledTableCell>
               <StyledTableCell align="right">{item.title}</StyledTableCell>
               <StyledTableCell align="right">{item.mrpPrice}</StyledTableCell>
               <StyledTableCell align="right">{item.sellingPrice}</StyledTableCell>
               <StyledTableCell align="right">{item.color}</StyledTableCell>
-               <StyledTableCell align="right">{
+              <StyledTableCell align="right">{
                 <Button size='small'>in_stock</Button>
-                }</StyledTableCell>
-                <StyledTableCell align="right">{
-                  <IconButton color='primary' size='small'><Edit/></IconButton>
-                  }</StyledTableCell>
+              }</StyledTableCell>
+              <StyledTableCell align="right">{
+                <IconButton color='primary' size='small'><Edit /></IconButton>
+              }</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

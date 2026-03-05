@@ -23,7 +23,7 @@ function Orders() {
         <div className='space-y-2'>
 
             {
-            order.orders.map((order)=>  order.orderItems.map((item)=> <OrderItemCard order={order} item={item} />))
+            order.orders.filter((order) => order.orderStatus !== 'CANCELLED').map((order)=>  order.orderItems.map((item)=> <OrderItemCard order={order} item={item} />))
           }
 
         </div>
