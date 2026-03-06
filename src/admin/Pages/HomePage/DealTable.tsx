@@ -6,17 +6,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Icon } from '@mui/material';
+import { Button, Icon, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
+import { useAppDispatch, useAppSelector } from '../../../State/store';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { getAllDeals, updateDeal } from '../../../State/admin/dealSlice';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  }
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -26,68 +27,129 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:hover': {
     backgroundColor: '#eef2ff',
     cursor: 'pointer',
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  }
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function DealTable() {
+
+  const dispatch = useAppDispatch();
+  const { deal } = useAppSelector(store => store);
+
+  const [open, setOpen] = useState(false);
+  const [selectedDeal, setSelectedDeal] = useState<any>(null);
+  const [discount, setDiscount] = useState("");
+
+  useEffect(() => {
+    dispatch(getAllDeals());
+  }, []);
+
+  const handleEdit = (item: any) => {
+    setSelectedDeal(item);
+    setDiscount(item.discount);
+    setOpen(true);
+  };
+
+ const handleUpdate = () => {
+
+  dispatch(updateDeal({
+    id: selectedDeal.id,
+    data: {
+      ...selectedDeal,
+      discount: discount
+    }
+  }));
+
+  setOpen(false);
+};
+
   return (
+    <>
+    
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow>
-            <StyledTableCell >No</StyledTableCell>
-          
-            <StyledTableCell >Image</StyledTableCell>
-            <StyledTableCell >Category</StyledTableCell>
+            <StyledTableCell>No</StyledTableCell>
+            <StyledTableCell>Image</StyledTableCell>
+            <StyledTableCell>Category</StyledTableCell>
             <StyledTableCell align="right">Discount</StyledTableCell>
-             <StyledTableCell align="right">Update</StyledTableCell>
-              <StyledTableCell align="right">Delete</StyledTableCell>
+            <StyledTableCell align="right">Update</StyledTableCell>
+            <StyledTableCell align="right">Delete</StyledTableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
+
+          {deal.deals.map((item: any, index: number) => (
+
+            <StyledTableRow key={item.id}>
+              
+              <StyledTableCell>
+                {index + 1}
               </StyledTableCell>
-              <StyledTableCell>{row.calories}</StyledTableCell>
-              <StyledTableCell >{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+
+              <StyledTableCell>
+                <img className='w-20 rounded-md' src={item.category.image} />
+              </StyledTableCell>
+
+              <StyledTableCell>
+                {item.category.categoryId}
+              </StyledTableCell>
+
               <StyledTableCell align="right">
-                <Button>
-                   <Edit/>
+                {item.discount}
+              </StyledTableCell>
+
+              <StyledTableCell align="right">
+                <Button onClick={() => handleEdit(item)}>
+                  <Edit />
                 </Button>
               </StyledTableCell>
-               <StyledTableCell align="right">
+
+              <StyledTableCell align="right">
                 <Icon>
-                   <Delete sx={{color:"red"}}/>
+                  <Delete sx={{ color: "red" }} />
                 </Icon>
               </StyledTableCell>
+
             </StyledTableRow>
+
           ))}
+
         </TableBody>
       </Table>
     </TableContainer>
+
+
+{/* UPDATE DEAL DIALOG */}
+
+<Dialog open={open} onClose={()=>setOpen(false)}>
+
+<DialogTitle>Update Deal</DialogTitle>
+
+<DialogContent>
+
+<TextField
+label="Discount"
+fullWidth
+value={discount}
+onChange={(e)=>setDiscount(e.target.value)}
+/>
+
+</DialogContent>
+
+<DialogActions>
+
+<Button onClick={()=>setOpen(false)}>Cancel</Button>
+
+<Button variant="contained" onClick={handleUpdate}>
+Update
+</Button>
+
+</DialogActions>
+
+</Dialog>
+
+</>
   );
 }

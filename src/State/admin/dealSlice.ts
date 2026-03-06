@@ -4,12 +4,19 @@ import { api } from "../../config/api";
 
 const API_URL = "/admin/deals";
 
-
-export const createDeal = createAsyncThunk<Deal, Deal>(
+/* ================= CREATE DEAL ================= */
+export const createDeal = createAsyncThunk(
   "deals/createDeal",
-  async (deal, { rejectWithValue }) => {
+  async (deal: any, { rejectWithValue }) => {
     try {
-      const response = await api.post(API_URL, deal);
+      const response = await api.post(API_URL, deal, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+
+      console.log("created deal", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -19,13 +26,41 @@ export const createDeal = createAsyncThunk<Deal, Deal>(
   }
 );
 
+/* ================= GET ALL DEALS ================= */
+export const getAllDeals = createAsyncThunk(
+  "deals/getAllDeals",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(API_URL, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
 
+      console.log("get all deals", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch deals"
+      );
+    }
+  }
+);
+
+/* ================= UPDATE DEAL ================= */
 export const updateDeal = createAsyncThunk<
   Deal,
   { id: number; data: Deal }
 >("deals/updateDeal", async ({ id, data }, { rejectWithValue }) => {
   try {
-    const response = await api.patch(`${API_URL}/${id}`, data);
+    const response = await api.patch(`${API_URL}/${id}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+    });
+
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
@@ -35,19 +70,24 @@ export const updateDeal = createAsyncThunk<
 });
 
 /* ================= DELETE DEAL ================= */
-export const deleteDeal = createAsyncThunk<
-  number,
-  number
->("deals/deleteDeal", async (id, { rejectWithValue }) => {
-  try {
-    await api.delete<ApiResponse>(`${API_URL}/${id}`);
-    return id; // return id so we remove from state
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data?.message || "Failed to delete deal"
-    );
+export const deleteDeal = createAsyncThunk<number, number>(
+  "deals/deleteDeal",
+  async (id, { rejectWithValue }) => {
+    try {
+      await api.delete<ApiResponse>(`${API_URL}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+
+      return id;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete deal"
+      );
+    }
   }
-});
+);
 
 /* ================= INITIAL STATE ================= */
 const initialState: DealsState = {
@@ -70,24 +110,39 @@ const dealSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+
+    /* ---- GET DEALS ---- */
+    builder.addCase(getAllDeals.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getAllDeals.fulfilled, (state, action) => {
+      state.loading = false;
+      state.deals = action.payload;
+    });
+
+    builder.addCase(getAllDeals.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+
     /* ---- CREATE ---- */
     builder.addCase(createDeal.pending, (state) => {
       state.loading = true;
     });
+
     builder.addCase(createDeal.fulfilled, (state, action) => {
       state.loading = false;
       state.dealCreated = true;
       state.deals.push(action.payload);
     });
+
     builder.addCase(createDeal.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload as string;
     });
 
     /* ---- UPDATE ---- */
-    builder.addCase(updateDeal.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(updateDeal.fulfilled, (state, action) => {
       state.loading = false;
       state.dealUpdated = true;
@@ -95,28 +150,18 @@ const dealSlice = createSlice({
       const index = state.deals.findIndex(
         (d) => d.id === action.payload.id
       );
+
       if (index !== -1) {
         state.deals[index] = action.payload;
       }
     });
-    builder.addCase(updateDeal.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
-    });
 
     /* ---- DELETE ---- */
-    builder.addCase(deleteDeal.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(deleteDeal.fulfilled, (state, action) => {
       state.loading = false;
       state.deals = state.deals.filter(
         (deal) => deal.id !== action.payload
       );
-    });
-    builder.addCase(deleteDeal.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload as string;
     });
   },
 });

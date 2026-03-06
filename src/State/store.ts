@@ -12,6 +12,7 @@ import transactionSlice from "./seller/transactionSlice";
 import adminSlice from "./admin/adminSlice"
 import customerSlice from "./customer/customerSlice"
 import couponReducer from "./customer/CouponSlice";
+import dealSlice from './admin/dealSlice';
 
 
 const rootReducer = combineReducers({
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
  //admin
 
   admin:adminSlice,
+  deal:dealSlice
 
 });
 const store = configureStore({

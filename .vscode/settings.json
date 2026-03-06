@@ -4,5 +4,9 @@
     "vscode-pets.petType": "frog",
     "vscode-pets.theme": "beach",
     "vscode-pets.throwBallWithMouse": true,
-    "vscode-pets.petColor": "white"
+    "vscode-pets.petColor": "white",
+    "chat.agent.enabled": true,
+    "chat.checkpoints.enabled": true,
+    "chat.customAgentInSubagent.enabled": true,
+    "chat.checkpoints.showFileChanges": true
 }
