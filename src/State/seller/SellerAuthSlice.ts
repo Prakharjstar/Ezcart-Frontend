@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../config/api";
 
 /**
- * 🔹 SAFE LOCAL STORAGE PARSER
- * Prevents crash when value = "undefined"
+ * SAFE LOCAL STORAGE PARSER
  */
 const getStoredUser = () => {
   try {
@@ -36,61 +35,75 @@ const initialState: SellerLoginState = {
 };
 
 //
-// 🔹 LOGIN (OTP)
-// Backend returns: { jwt, role }
-// NOT user anymore
+// 🔹 SELLER LOGIN (OTP)
 //
 export const SellerLogin = createAsyncThunk<
   { jwt: string },
-  { email: string; otp: string }
+  { email: string; otp: string },
+  { rejectValue: any }
 >("seller/login", async (loginData, { rejectWithValue }) => {
   try {
-    const response = await api.post("/auth/signing", loginData);
+
+    const response = await api.post("/sellers/login", loginData);
+
     const { jwt, role } = response.data;
 
-    // ✅ store only safe values
     localStorage.setItem("jwt", jwt);
     localStorage.setItem("role", role);
 
-    // ❌ NEVER store undefined user
+    // clear invalid stored user
     localStorage.removeItem("user");
 
     return { jwt };
+
   } catch (err: any) {
-    return rejectWithValue(err.response?.data || { message: "Login Failed" });
+    return rejectWithValue(
+      err.response?.data || { message: "Login Failed" }
+    );
   }
 });
 
 //
-// 🔹 FETCH SELLER PROFILE AFTER LOGIN
-// THIS is where we get actual seller data
+// 🔹 FETCH SELLER PROFILE
 //
-export const fetchSellerProfile = createAsyncThunk<any>(
-  "seller/profile",
-  async (_, { rejectWithValue }) => {
-    try {
-      const jwt = localStorage.getItem("jwt");
+export const fetchSellerProfile = createAsyncThunk<
+  any,
+  void,
+  { rejectValue: string }
+>("seller/profile", async (_, { rejectWithValue }) => {
+  try {
 
-      const response = await api.get("/api/sellers/profile", {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
+    const jwt = localStorage.getItem("jwt");
 
-      const seller = response.data;
-
-      // ✅ store VALID JSON ONLY
-      localStorage.setItem("user", JSON.stringify(seller));
-
-      return seller;
-    } catch (err: any) {
-      return rejectWithValue("Failed to fetch seller profile");
+    if (!jwt) {
+      throw new Error("No JWT found");
     }
-  }
-);
 
+    const response = await api.get("/sellers/profile", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    const seller = response.data;
+
+    localStorage.setItem("user", JSON.stringify(seller));
+
+    return seller;
+
+  } catch (err) {
+    return rejectWithValue("Failed to fetch seller profile");
+  }
+});
+
+//
+// 🔹 SELLER SLICE
+//
 const sellerSlice = createSlice({
   name: "seller",
   initialState,
   reducers: {
+
     logout: (state) => {
       state.jwt = null;
       state.user = null;
@@ -100,29 +113,49 @@ const sellerSlice = createSlice({
       localStorage.removeItem("user");
       localStorage.removeItem("role");
     },
+
   },
+
   extraReducers: (builder) => {
+
     builder
 
       // LOGIN
       .addCase(SellerLogin.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
+
       .addCase(SellerLogin.fulfilled, (state, action) => {
         state.loading = false;
         state.jwt = action.payload.jwt;
+        state.error = null;
       })
+
       .addCase(SellerLogin.rejected, (state, action: any) => {
         state.loading = false;
         state.error = action.payload?.message || "Login failed";
       })
 
-      // PROFILE FETCH
+      // FETCH PROFILE
+      .addCase(fetchSellerProfile.pending, (state) => {
+        state.loading = true;
+      })
+
       .addCase(fetchSellerProfile.fulfilled, (state, action) => {
+        state.loading = false;
         state.user = action.payload;
+        state.error = null;
+      })
+
+      .addCase(fetchSellerProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Profile fetch failed";
       });
+
   },
 });
 
 export const { logout } = sellerSlice.actions;
+
 export default sellerSlice.reducer;
