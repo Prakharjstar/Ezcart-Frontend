@@ -62,7 +62,7 @@ const SellerAccountForm = () => {
         console.log("SELLER REGISTER DATA", payload);
 
         const response = await axios.post(
-          "http://localhost:5454/sellers",
+          "http://localhost:5454/api/sellers/register",
           payload
         );
 
