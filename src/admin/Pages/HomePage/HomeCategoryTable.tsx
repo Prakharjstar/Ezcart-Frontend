@@ -1,14 +1,15 @@
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Button } from '@mui/material';
-import { Edit } from '@mui/icons-material';
-import { HomeCategory } from '../../../types/HomeCategoryTypes';
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Button } from "@mui/material";
+import { Edit } from "@mui/icons-material";
+
+import { HomeCategory } from "../../../types/HomeCategoryTypes";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -21,67 +22,76 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: '#f9fafb',
+  "&:nth-of-type(odd)": {
+    backgroundColor: "#f9fafb",
   },
-  '&:hover': {
-    backgroundColor: '#eef2ff',
-    cursor: 'pointer',
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
+  "&:hover": {
+    backgroundColor: "#eef2ff",
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
+interface Props {
+  data: HomeCategory[];
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+export default function HomeCategoryTable({ data }: Props) {
 
-export default function HomeCategoryTable({data}:{data:HomeCategory[]}) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <Table sx={{ minWidth: 700 }}>
+
         <TableHead>
           <TableRow>
-            <StyledTableCell >No</StyledTableCell>
-            <StyledTableCell >Id</StyledTableCell>
-            <StyledTableCell align="right">Image</StyledTableCell>
-            <StyledTableCell align="right">Category</StyledTableCell>
-            <StyledTableCell align="right">Update</StyledTableCell>
+            <StyledTableCell>No</StyledTableCell>
+            <StyledTableCell>Id</StyledTableCell>
+            <StyledTableCell>Image</StyledTableCell>
+            <StyledTableCell>Category</StyledTableCell>
+            <StyledTableCell>Update</StyledTableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {data.map((category, index) => (
+
+          {data?.map((category, index) => (
+
             <StyledTableRow key={category.id}>
-              <StyledTableCell component="th" scope="row">
-                {index+1}
+
+              <StyledTableCell>
+                {index + 1}
               </StyledTableCell>
-              <StyledTableCell>{category.id}</StyledTableCell>
-              <StyledTableCell >
-                <img className='w-20 rounded-md ' src={category.image} alt=""/></StyledTableCell>
-              <StyledTableCell align="right">{category.categoryId}</StyledTableCell>
-              <StyledTableCell align="right">
-                <Button>
-                   <Edit/>
+
+              <StyledTableCell>
+                {category.id}
+              </StyledTableCell>
+
+              <StyledTableCell>
+
+                <img
+                  src={category.image}
+                  alt="category"
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+
+              </StyledTableCell>
+
+              <StyledTableCell>
+                {category.categoryId}
+              </StyledTableCell>
+
+              <StyledTableCell>
+
+                <Button variant="contained" size="small">
+                  <Edit />
                 </Button>
+
               </StyledTableCell>
+
             </StyledTableRow>
+
           ))}
+
         </TableBody>
+
       </Table>
     </TableContainer>
   );
