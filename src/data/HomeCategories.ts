@@ -41,7 +41,7 @@ export const homeCategories :HomeCategory[]= [
     categoryId: "women_lehenga_cholis",
     section: "GRID",
     name: "Women Lehenga Cholis",
-    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80"
+    image: "https://www.kollybollyethnics.com/image/catalog/data/31Aug2017/Sonal-chauhan-blue-green-georgette-party-wear-anarkali-suit-4705.jpg"
   },
   {
     categoryId: "men_formal_shoes",
@@ -50,7 +50,7 @@ export const homeCategories :HomeCategory[]= [
     image: "https://images.unsplash.com/photo-1595950653128-46bb078c9f46?auto=format&fit=crop&w=800&q=80"
   },
   {
-    categoryId: "men_sherwanis",
+    categoryId: "women_sarees",
     section: "GRID",
     name: "Men Sherwanis",
     image: "https://images.unsplash.com/photo-1520974735196-48ad189d6553?auto=format&fit=crop&w=800&q=80"
