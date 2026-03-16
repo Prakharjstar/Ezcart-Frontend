@@ -113,7 +113,7 @@ const SellersTable = () => {
               <StyledTableRow key={seller.id}>
 
                 <StyledTableCell>
-                  {seller.name}
+                  {seller.sellerName}
                 </StyledTableCell>
 
                 <StyledTableCell>
@@ -129,7 +129,7 @@ const SellersTable = () => {
                 </StyledTableCell>
 
                 <StyledTableCell align="right">
-                  {seller.businessName}
+                  {seller.businessDetails?.businessName}
                 </StyledTableCell>
 
                 <StyledTableCell align="right">
