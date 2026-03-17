@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../../State/store";
-import { fetchSellers, updateSellerStatus } from "../../../State/seller/sellerSlice";
+import { fetchSellers, updateSellerStatus } from "../../../State/seller/sellerslice";
 
 const accountStatusList = [
   { status: "PENDING_VERIFICATION", title: "Pending Verification" },

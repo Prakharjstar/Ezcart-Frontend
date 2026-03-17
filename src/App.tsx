@@ -19,7 +19,7 @@ import Auth from './customer/pages/Auth/Auth';
 import PaymentSuccess from './customer/pages/PaymentSuccess';
 import WishList from './customer/WishList/WishList';
 import { useAppDispatch, useAppSelector } from './State/store';
-import { fetchSellerProfile } from './State/seller/sellerSlice';
+import { fetchSellerProfile } from './State/seller/sellerslice';
 import { fetchUserProfile } from './State/AuthSlice';
 import { createHomeCategories } from './State/customer/customerSlice';
 import { homeCategories } from './data/HomeCategories';

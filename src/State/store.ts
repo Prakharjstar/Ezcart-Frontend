@@ -1,6 +1,6 @@
 import { combineReducers, configureStore, createSlice } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import sellerSlice from "./seller/sellerSlice"
+import sellerSlice from "./seller/sellerslice"
 import sellerProductSlice from "./seller/sellerProductSlice";
 import productSlice from "./customer/ProductSlice";
 import authSlice from "./AuthSlice";
