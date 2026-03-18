@@ -1,92 +1,69 @@
 import React, { useState } from "react";
-import { Button, TextField, CircularProgress } from "@mui/material";
-import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../../../State/store";
-import { sendLoginSignupOtp } from "../../../State/AuthSlice";
-import { SellerLogin } from "../../../State/seller/SellerAuthSlice";
+import { useFormik } from "formik";
+import { Button, CircularProgress, TextField } from "@mui/material";
+import {
+  sendSellerOtp,
+  sellerLoginEmail, // ✅ new thunk for email+password
+  sellerLoginOtp,
+  fetchSellerProfile,
+} from "../../../State/seller/SellerAuthSlice";
 import { useNavigate } from "react-router-dom";
 
 const SellerLoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { auth } = useAppSelector((state) => state);
 
-  // Local state to show errors
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const [otpSent, setOtpSent] = useState(false);
+  const { sellerAuth } = useAppSelector((store) => store);
+  const [useOtp, setUseOtp] = useState(false); // toggle between OTP & password login
 
   const formik = useFormik({
-    initialValues: {
-      email: "",
-      otp: "",
-    },
+    initialValues: { email: "", password: "", otp: "" },
     onSubmit: async (values) => {
-      setLoginError(null); // reset error
-      if (!values.otp) {
-        setLoginError("Please enter OTP.");
-        return;
-      }
       try {
-        const res = await dispatch(SellerLogin(values)).unwrap();
-        console.log("LOGIN SUCCESS", res);
-        navigate("/seller/dashboard");
-      } catch (err: any) {
-        console.log("LOGIN FAILED", err);
-
-        // Extract readable message from backend
-        let message = "Login failed";
-        if (err?.response?.data?.message) {
-          message = err.response.data.message;
-        } else if (err.message) {
-          message = err.message;
-        } else if (typeof err === "string") {
-          message = err;
-        } else if (err.status && err.error) {
-          message = `${err.status} ${err.error}: ${err.message || "Access Denied"}`;
+        if (useOtp) {
+          // OTP login
+          const res: any = await dispatch(
+            sellerLoginOtp({ email: values.email, otp: values.otp })
+          ).unwrap();
+          console.log("SELLER LOGIN OTP RESPONSE", res);
         } else {
-          message = JSON.stringify(err);
+          // Email + password login
+          const res: any = await dispatch(
+            sellerLoginEmail({ email: values.email, password: values.password })
+          ).unwrap();
+          console.log("SELLER LOGIN EMAIL RESPONSE", res);
         }
 
-        setLoginError(message);
+        const jwt = localStorage.getItem("jwt");
+        if (jwt) {
+          await dispatch(fetchSellerProfile()).unwrap();
+          navigate("/seller/dashboard");
+        }
+      } catch (error: any) {
+        console.log("Seller Login Error", error);
+        alert(error?.message || "Login Failed");
       }
     },
   });
 
-  const handleSendOtp = async () => {
+  const handleSendOtp = () => {
     if (!formik.values.email) {
-      setLoginError("Enter your email first");
+      alert("Please enter email first");
       return;
     }
-
-    setLoginError(null); // reset error
-    try {
-      await dispatch(sendLoginSignupOtp({ email: formik.values.email })).unwrap();
-      setOtpSent(true);
-      alert("OTP sent successfully!");
-    } catch (err: any) {
-      console.log("OTP SEND FAILED", err);
-      let message = "Failed to send OTP";
-      if (err?.response?.data?.message) {
-        message = err.response.data.message;
-      } else if (err.message) {
-        message = err.message;
-      }
-      setLoginError(message);
-    }
+    dispatch(sendSellerOtp(formik.values.email));
+    setUseOtp(true);
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-5 border rounded shadow">
-      <h1 className="text-center text-2xl text-primary-color font-bold mb-5">
-        Login as Seller
+    <div>
+      <h1 className="text-center font-bold text-xl text-primary-color pb-8">
+        Seller Login
       </h1>
 
-      {loginError && (
-        <p className="text-red-600 mb-2 font-medium">{loginError}</p>
-      )}
-
-      <div className="space-y-4">
-        {/* Email */}
+      <div className="space-y-5">
+        {/* EMAIL FIELD */}
         <TextField
           fullWidth
           name="email"
@@ -95,18 +72,20 @@ const SellerLoginForm: React.FC = () => {
           onChange={formik.handleChange}
         />
 
-        {/* Send OTP Button */}
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={handleSendOtp}
-          disabled={auth.loading}
-        >
-          {auth.loading ? <CircularProgress size={24} /> : "Send OTP"}
-        </Button>
+        {/* PASSWORD FIELD */}
+        {!useOtp && (
+          <TextField
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+          />
+        )}
 
-        {/* OTP Field */}
-        {otpSent && (
+        {/* OTP FIELD */}
+        {useOtp && sellerAuth.otpSent && (
           <div className="space-y-2">
             <p className="font-medium text-sm text-primary-color">
               Enter OTP sent to your email
@@ -121,15 +100,45 @@ const SellerLoginForm: React.FC = () => {
           </div>
         )}
 
-        {/* Login Button */}
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={formik.handleSubmit as any}
-          disabled={!formik.values.otp}
-        >
-          Login
-        </Button>
+        {/* BUTTON */}
+        {useOtp ? (
+          <Button
+            onClick={() => formik.handleSubmit()}
+            fullWidth
+            variant="contained"
+            sx={{ py: "11px" }}
+          >
+            {sellerAuth.loading ? <CircularProgress size={24} /> : "Login as Seller"}
+          </Button>
+        ) : (
+          <Button
+            onClick={() => formik.handleSubmit()}
+            fullWidth
+            variant="contained"
+            sx={{ py: "11px" }}
+          >
+            {sellerAuth.loading ? <CircularProgress size={24} /> : "Login as Seller"}
+          </Button>
+        )}
+
+        {/* TOGGLE LINK */}
+        <p className="text-center text-sm text-gray-500 mt-2">
+          {useOtp ? (
+            <span
+              className="cursor-pointer text-blue-600"
+              onClick={() => setUseOtp(false)}
+            >
+              Login with password instead
+            </span>
+          ) : (
+            <span
+              className="cursor-pointer text-blue-600"
+              onClick={handleSendOtp}
+            >
+              Login with OTP
+            </span>
+          )}
+        </p>
       </div>
     </div>
   );
