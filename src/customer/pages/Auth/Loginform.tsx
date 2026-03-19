@@ -25,7 +25,7 @@ const SellerLoginForm: React.FC = () => {
   return (
     <div>
       <h1 className="text-center font-bold text-xl text-primary-color pb-8">
-        Seller Login
+        User Login
       </h1>
 
       <div className="space-y-5">

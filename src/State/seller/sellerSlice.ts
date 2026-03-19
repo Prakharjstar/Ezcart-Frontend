@@ -5,10 +5,23 @@ import { api } from "../../config/api";
 
 export const fetchSellers = createAsyncThunk(
   "seller/fetchSellers",
-  async (status: string, { rejectWithValue }) => {
+  async (status: string | null, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/api/sellers?status=${status}`);
+
+      let url = "/api/sellers";
+
+      // ✅ Only add query param if status exists
+      if (status && status !== "ALL") {
+        url = `/api/sellers?status=${status}`;
+      }
+
+      const response = await api.get(url);
+
+      console.log("API URL:", url); // 🔍 debug
+      console.log("Sellers Data:", response.data);
+
       return response.data;
+
     } catch (error: any) {
       return rejectWithValue(error.response?.data);
     }
@@ -91,7 +104,7 @@ const sellerSlice = createSlice({
         state.error = action.payload;
       });
 
-    /* FETCH PROFILE */
+   
 
     builder
       .addCase(fetchSellerProfile.pending, (state) => {

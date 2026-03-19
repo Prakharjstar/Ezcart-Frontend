@@ -45,7 +45,7 @@ const SellersTable = () => {
   const dispatch = useAppDispatch();
   const { sellers } = useAppSelector((state) => state.seller);
 
-  const [accountStatus, setAccountStatus] = useState("PENDING_VERIFICATION");
+  const [accountStatus, setAccountStatus] = useState("ACTIVE");
 
   const handleFilterChange = (event:any) => {
     setAccountStatus(event.target.value);
