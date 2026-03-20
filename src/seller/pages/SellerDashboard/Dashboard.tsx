@@ -15,20 +15,21 @@ function Dashboard() {
 
     const token = localStorage.getItem("jwt");
 
-    // ===================== PRODUCTS =====================
-    fetch("http://localhost:5454/products", {
+  
+    fetch("http://localhost:5454/api/sellers/products", {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
       .then((res) => res.json())
       .then((data) => {
-        setTotalProducts(data.totalElements);
+        console.log("SELLER PRODUCT " , data)
+        setTotalProducts(data.length);
       })
       .catch((err) => console.error(err));
 
 
-    // ===================== ORDERS =====================
+    
     fetch("http://localhost:5454/api/orders/user", {
       headers: {
         Authorization: `Bearer ${token}`
@@ -41,7 +42,7 @@ function Dashboard() {
 
         const today = new Date().toISOString().split("T")[0];
 
-        // ===================== ORDERS TODAY =====================
+        
         const todayOrders = data.filter((order:any) =>
           order.orderDate.startsWith(today)
         );
@@ -49,7 +50,6 @@ function Dashboard() {
         setOrdersToday(todayOrders.length);
 
 
-        // ===================== REVENUE (ONLY PAID ORDERS) =====================
         const revenue = data
           .filter((order:any) => order.paymentStatus === "COMPLETED")
           .reduce(
@@ -60,7 +60,6 @@ function Dashboard() {
         setTotalRevenue(revenue);
 
 
-        // ===================== RECENT ORDERS =====================
         const sortedOrders = [...data].sort(
           (a:any, b:any) =>
             new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()

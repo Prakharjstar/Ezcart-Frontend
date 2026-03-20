@@ -7,7 +7,7 @@ export const fetchSellerProduct= createAsyncThunk<Product[],any>("/sellerProduct
     async(jwt : string ,{rejectWithValue})=>{
 
         try{
-            const response = await api.get(`/seller/products`,{
+            const response = await api.get(`api/sellers/products`,{
                 headers:{
                     Authorization: `Bearer ${jwt}`,
 
