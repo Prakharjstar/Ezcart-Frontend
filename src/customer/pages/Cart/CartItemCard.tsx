@@ -3,7 +3,8 @@ import { Button, Divider, IconButton } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { CartItem } from "../../../types/cartTypes";
 import { useAppDispatch, useAppSelector } from "../../../State/store";
-import { updateCartItem, deleteCartItem } from "../../../State/customer/CartSlice";
+import {  deleteCartItem } from "../../../State/customer/CartSlice";
+
 
 const CartItemCard = ({ item }: { item: CartItem }) => {
   const dispatch = useAppDispatch();
@@ -88,3 +89,7 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
 };
 
 export default CartItemCard;
+
+function updateCartItem(arg0: { jwt: string; cartItemId: number; cartItem: { quantity: number; }; }): any {
+  throw new Error("Function not implemented.");
+}

@@ -1,72 +1,58 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { api } from "../../config/api";
-import { Cart } from "../../types/cartTypes";
-import { CouponState } from "../../types/CouponTypes";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const API_URL = "/api/coupons";
+interface CouponState {
+  loading: boolean;
+  error: string | null;
+}
 
-export const applyCoupon  = createAsyncThunk<
-Cart,
-{
-    apply: string;
-    code: string;
-    orderValue: number;
-    jwt: string;
-},
-{
-    rejectValue: string
-}>(
-    "coupon/applyCoupon",
-    async({apply , code , orderValue , jwt},{rejectWithValue})=>{
-        try{
-            const response = await api.post(`${API_URL}/apply`,null,{
-                params:{apply,code,orderValue},
-                headers:{Authorization:`Bearer ${jwt}`},
-            });
-            console.log("apply coupon" , response.data)
-            return response.data;
-        }catch(error:any){
-            console.log("error " , error)
-            return rejectWithValue(error.response?.data.error || "Failed to apply Coupon");
-        }
-    }
-);
-
-const initialState:CouponState ={
-    coupons:[],
-    cart:null,
-    loading:false,
-    error:null,
-    couponCreated:false,
-    couponApplied:false,
+const initialState: CouponState = {
+  loading: false,
+  error: null,
 };
 
-const couponSlice = createSlice({
-    name:"coupon",
-    initialState,
-    reducers:{},
-    extraReducers: (builder) =>{
-        builder
-        .addCase(applyCoupon.pending  , (state)=>{
-            state.loading = true;
-            state.error = null;
-            state.couponApplied=false;
-        })
-        .addCase(applyCoupon.fulfilled, (state,action)=>{
-            state.loading = false;
-            state.cart = action.payload;
+// ✅ APPLY / REMOVE COUPON
+export const applyCoupon = createAsyncThunk(
+  "coupon/apply",
+  async ({ apply, code, orderValue, jwt }: any) => {
 
-            if(action.meta.arg.apply ==="true"){
-                state.couponApplied=true
-            }
-        })
-        .addCase(applyCoupon.rejected,(state,action:PayloadAction<string | undefined>)=>{
-            state.loading =false;
-            state.error = action.payload || "Falied to apply coupon";
-            state.couponApplied=false;
-            
-        });
-    },
+    const res = await fetch(
+      `http://localhost:5454/api/coupons/apply?apply=${apply}&code=${code}&orderValue=${orderValue}`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${jwt}`
+        }
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed: ${res.status}`);
+    }
+
+    const data = await res.json();
+    console.log("COUPON RESPONSE 👉", data);
+
+    return data; // 🔥 returns updated cart
+  }
+);
+
+const couponSlice = createSlice({
+  name: "coupon",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(applyCoupon.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(applyCoupon.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(applyCoupon.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Error";
+      });
+  },
 });
 
-export default couponSlice.reducer
+export default couponSlice.reducer;
