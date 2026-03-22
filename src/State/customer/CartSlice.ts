@@ -3,21 +3,6 @@ import { Cart, CartItem } from "../../types/cartTypes";
 import { api } from "../../config/api";
 import { applyCoupon } from "./CouponSlice";
 
-
-const calculateCartTotals = (cartItems: CartItem[]) => {
-  const totalMrpPrice = cartItems.reduce(
-    (sum, item) => sum + item.mrpPrice * item.quantity,
-    0
-  );
-
-  const totalSellingPrice = cartItems.reduce(
-    (sum, item) => sum + item.sellingPrice * item.quantity,
-    0
-  );
-
-  return { totalMrpPrice, totalSellingPrice };
-};
-
 interface CartState {
   cart: Cart | null;
   loading: boolean;
@@ -64,7 +49,7 @@ export const addItemToCart = createAsyncThunk<
 
 // ✅ DELETE ITEM
 export const deleteCartItem = createAsyncThunk<
-  any,
+  number,
   { jwt: string; cartItemId: number }
 >("cart/deleteCartItem", async ({ jwt, cartItemId }, { rejectWithValue }) => {
   try {
@@ -85,24 +70,12 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      // ✅ FETCH CART
+      //  FETCH CART ( TRUST BACKEND COMPLETELY)
       .addCase(fetchUserCart.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchUserCart.fulfilled, (state, action: PayloadAction<Cart>) => {
-        const cart = action.payload;
-
-        // 🔥 Only calculate if NO coupon
-        if (!cart.couponCode && cart.cartItems) {
-          const totals = calculateCartTotals(cart.cartItems);
-
-          cart.totalMrpPrice = totals.totalMrpPrice;
-          cart.totalSellingPrice = totals.totalSellingPrice;
-          cart.discountAmount = totals.totalMrpPrice - totals.totalSellingPrice;
-          cart.finalPrice = totals.totalSellingPrice;
-        }
-
-        state.cart = cart;
+        state.cart = action.payload; //  NO MANUAL CALCULATION
         state.loading = false;
       })
       .addCase(fetchUserCart.rejected, (state) => {
@@ -110,44 +83,25 @@ const cartSlice = createSlice({
         state.error = "Failed to fetch cart";
       })
 
-      // ✅ APPLY COUPON (MAIN FIX)
-      .addCase(applyCoupon.fulfilled, (state, action) => {
-        state.cart = action.payload; // 🔥 TRUST BACKEND
+      // APPLY COUPON
+      .addCase(applyCoupon.fulfilled, (state, action: PayloadAction<Cart>) => {
+        state.cart = action.payload; //  updated cart with coupon
       })
 
-      // ✅ ADD ITEM
+      //  ADD ITEM
       .addCase(addItemToCart.fulfilled, (state, action: PayloadAction<CartItem>) => {
         if (!state.cart) return;
 
         state.cart.cartItems.push(action.payload);
-
-        // ❌ Don't recalc if coupon exists
-        if (!state.cart.couponCode) {
-          const totals = calculateCartTotals(state.cart.cartItems);
-
-          state.cart.totalMrpPrice = totals.totalMrpPrice;
-          state.cart.totalSellingPrice = totals.totalSellingPrice;
-          state.cart.discountAmount = totals.totalMrpPrice - totals.totalSellingPrice;
-          state.cart.finalPrice = totals.totalSellingPrice;
-        }
       })
 
-      // ✅ DELETE ITEM
-      .addCase(deleteCartItem.fulfilled, (state, action) => {
+      //  DELETE ITEM
+      .addCase(deleteCartItem.fulfilled, (state, action: PayloadAction<number>) => {
         if (!state.cart) return;
 
         state.cart.cartItems = state.cart.cartItems.filter(
           (item) => item.id !== action.payload
         );
-
-        if (!state.cart.couponCode) {
-          const totals = calculateCartTotals(state.cart.cartItems);
-
-          state.cart.totalMrpPrice = totals.totalMrpPrice;
-          state.cart.totalSellingPrice = totals.totalSellingPrice;
-          state.cart.discountAmount = totals.totalMrpPrice - totals.totalSellingPrice;
-          state.cart.finalPrice = totals.totalSellingPrice;
-        }
       });
   },
 });

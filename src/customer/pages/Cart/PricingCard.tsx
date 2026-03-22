@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../State/store';
 
 function PricingCard() {
   const { cart } = useAppSelector((store) => store.cart);
+  console.log("FINAL CART 👉", cart);
 
   // Prices
   const mrp = cart?.totalMrpPrice ?? 0;

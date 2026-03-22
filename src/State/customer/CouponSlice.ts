@@ -10,7 +10,7 @@ const initialState: CouponState = {
   error: null,
 };
 
-// ✅ APPLY / REMOVE COUPON
+// ✅ APPLY COUPON
 export const applyCoupon = createAsyncThunk(
   "coupon/apply",
   async ({ apply, code, orderValue, jwt }: any) => {
@@ -20,13 +20,14 @@ export const applyCoupon = createAsyncThunk(
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${jwt}`
-        }
+          Authorization: `Bearer ${jwt}`,
+        },
       }
     );
 
     if (!res.ok) {
-      throw new Error(`Failed: ${res.status}`);
+      const errorText = await res.text();
+      throw new Error(errorText);
     }
 
     const data = await res.json();
