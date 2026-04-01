@@ -74,17 +74,23 @@ export default function TransactionTable() {
         </TableHead>
         <TableBody>
           {transactions.transactions.map((item) => (
-            <StyledTableRow key={item.id}>
-                <StyledTableCell component="th" scope="row">
-                {item.date}
-              </StyledTableCell>
+           <StyledTableRow key={item.id}>
+  <StyledTableCell component="th" scope="row">
+    {item.date}
+  </StyledTableCell>
 
-              <StyledTableCell component="th" scope="row">
-                {item.customer.email}
-              </StyledTableCell>
-              {/* <StyledTableCell align="right">{item.order.id}</StyledTableCell> */}
-              <StyledTableCell align="right">{item.order.id}</StyledTableCell> */
-            </StyledTableRow>
+  <StyledTableCell align="right">
+    {item.customer?.email}
+  </StyledTableCell>
+
+  <StyledTableCell align="right">
+    {item.order?.id}
+  </StyledTableCell>
+
+  <StyledTableCell align="right">
+     ₹{item.order?.totalSellingPrice}
+  </StyledTableCell>
+</StyledTableRow>
           ))}
         </TableBody>
       </Table>

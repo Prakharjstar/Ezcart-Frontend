@@ -45,11 +45,10 @@ const AddressForm =({paymentGateway}:any)=> {
     console.log("PAYMENT RESPONSE ", res);
 
     if (res.payment_link_url) {
-      // Option 2: Open the payment link in new tab
+    
       window.open(res.payment_link_url, "_blank");
       
-      // ya agar same tab me redirect karna ho:
-      // window.location.href = res.payment_link_url;
+      
     }
 
   } catch (err) {

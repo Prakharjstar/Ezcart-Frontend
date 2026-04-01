@@ -3,6 +3,7 @@ import { Seller } from "./SellerTypes";
 import { User, UserRole } from "./userTypes";
 
 export interface Transaction {
+    amount: number;
     id: number;
     customer: User;
     order:Order;

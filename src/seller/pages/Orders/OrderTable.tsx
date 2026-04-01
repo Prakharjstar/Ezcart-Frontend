@@ -60,7 +60,7 @@ export default function OrderTable() {
                   <div className="flex gap-2 flex-wrap">
                     {item.orderItems?.map((orderItem: any, index: number) => {
                       const product = orderItem.product;
-                      if (!product) return null; // skip if product is null
+                      if (!product) return null; 
 
                       return (
                         <div key={index} className="flex gap-4 items-center border p-2 rounded-md">

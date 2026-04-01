@@ -10,10 +10,10 @@ const PaymentSuccess = () => {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const {orderId}=useParams();
-    const getQueryParam=(key:string)=>{
-        const query = new URLSearchParams(location.search)
-        return query.get("orderId")
-    }
+  const getQueryParam = (key: string) => {
+    const query = new URLSearchParams(location.search);
+    return query.get(key);
+};
 
     useEffect(()=>{
         const paymentId = getQueryParam("razorpay_payment_id");
