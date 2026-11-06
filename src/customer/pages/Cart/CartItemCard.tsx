@@ -35,7 +35,7 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
     );
   };
 
-  // handle remove
+  
   const handleRemoveItem = () => {
     if (!jwt) return;
     dispatch(deleteCartItem({ jwt, cartItemId: item.id }));

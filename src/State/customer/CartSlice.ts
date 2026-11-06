@@ -70,7 +70,7 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-      //  FETCH CART ( TRUST BACKEND COMPLETELY)
+   
       .addCase(fetchUserCart.pending, (state) => {
         state.loading = true;
       })
@@ -83,12 +83,12 @@ const cartSlice = createSlice({
         state.error = "Failed to fetch cart";
       })
 
-      // APPLY COUPON
+    
       .addCase(applyCoupon.fulfilled, (state, action: PayloadAction<Cart>) => {
-        state.cart = action.payload; //  updated cart with coupon
+        state.cart = action.payload; 
       })
 
-      //  ADD ITEM
+      
       .addCase(addItemToCart.fulfilled, (state, action: PayloadAction<CartItem>) => {
         if (!state.cart) return;
 

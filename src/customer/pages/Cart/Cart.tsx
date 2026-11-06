@@ -20,6 +20,7 @@ const Cart = () => {
     dispatch(fetchUserCart(localStorage.getItem("jwt") || ""));
   }, [dispatch]);
 
+  // Apply Coupon
   const handleApplyCoupon = () => {
     const jwt = localStorage.getItem("jwt") || "";
 
@@ -31,6 +32,20 @@ const Cart = () => {
       orderValue: cart?.totalSellingPrice || 0,
       jwt
     }));
+  };
+
+  // Remove Coupon
+  const handleRemoveCoupon = () => {
+    const jwt = localStorage.getItem("jwt") || "";
+
+    dispatch(applyCoupon({
+      apply: "false",   // backend should remove coupon
+      code: cart?.couponCode || "",
+      orderValue: cart?.totalSellingPrice || 0,
+      jwt
+    }));
+
+    setCouponCode("");
   };
 
   return (
@@ -55,11 +70,11 @@ const Cart = () => {
               <span>Apply Coupons</span>
             </div>
 
-          
-            { !cart?.couponCode ? (
+            {!cart?.couponCode ? (
 
               <div className="flex justify-between items-center">
                 <TextField
+                  value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                   placeholder="coupon code"
                   size="small"
@@ -74,9 +89,15 @@ const Cart = () => {
               <div className="flex">
                 <div className="p-1 pl-5 pr-3 border rounded-md flex gap-2 items-center">
                   <span>Applied: {cart.couponCode}</span>
-                  <IconButton size="small">
+
+                  {/* FIXED */}
+                  <IconButton
+                    size="small"
+                    onClick={handleRemoveCoupon}
+                  >
                     <Close className="text-red-600" />
                   </IconButton>
+
                 </div>
               </div>
 

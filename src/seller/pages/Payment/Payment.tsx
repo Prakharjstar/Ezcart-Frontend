@@ -15,14 +15,14 @@ const Payment = () => {
       }
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: any[]) => {
 
         const completedOrders = data.filter(
-          (order: any) => order.paymentStatus === "COMPLETED"
+          (order) => order.paymentStatus === "COMPLETED"
         );
 
         const revenue = completedOrders.reduce(
-          (sum: number, order: any) => sum + order.totalSellingPrice,
+          (sum, order) => sum + order.totalSellingPrice,
           0
         );
 
@@ -30,7 +30,7 @@ const Payment = () => {
 
         if (completedOrders.length > 0) {
           const latest = [...completedOrders].sort(
-            (a: any, b: any) =>
+            (a, b) =>
               new Date(b.orderDate).getTime() -
               new Date(a.orderDate).getTime()
           )[0];

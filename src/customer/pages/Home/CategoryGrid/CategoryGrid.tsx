@@ -12,7 +12,7 @@ const CategoryGrid =() =>{
 
            <div className='col-span-2 row-span-6 text-white '>
             <img className="w-full h-full object-cover object-top rounded-md transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-xl hover:brightness-110"
-                src="https://th.bing.com/th/id/OIP.CDyoUTuh7OTZCAPfsuoxmgAAAA?w=197&h=195&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="" />
+                src="https://imagescdn.louisphilippe.com/img/app/product/3/39620727-19754690.jpg?auto=format&w=390" alt="" />
 
          </div>
 

@@ -10,7 +10,7 @@ const initialState: CouponState = {
   error: null,
 };
 
-// ✅ APPLY COUPON
+
 export const applyCoupon = createAsyncThunk(
   "coupon/apply",
   async ({ apply, code, orderValue, jwt }: any) => {
@@ -31,9 +31,9 @@ export const applyCoupon = createAsyncThunk(
     }
 
     const data = await res.json();
-    console.log("COUPON RESPONSE 👉", data);
+    console.log("COUPON RESPONSE ", data);
 
-    return data; // 🔥 returns updated cart
+    return data; 
   }
 );
 
